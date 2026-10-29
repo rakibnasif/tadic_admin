@@ -1,0 +1,2132 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset=utf8>
+    <meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <style>
+        :root {
+            color-scheme: light;
+            box-sizing: border-box;
+            padding-top: env(safe-area-inset-top, 0px);
+            padding-bottom: env(safe-area-inset-bottom, 0px)
+        }
+
+        html {
+            scroll-padding-top: env(safe-area-inset-top, 0px)
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font: 14px -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #fff;
+            color: #000
+        }
+
+        img {
+            max-width: 100%
+        }
+
+        [hidden]:not([hidden=until-found i]) {
+            display: none !important
+        }
+    </style>
+</head>
+
+<body>
+    <title>TADIĆ Admin</title>
+    <meta name="claude:viewport-fit-sides" content="cover">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --ink: #14161a;
+            --ink2: #4a4f58;
+            --ink3: #80858f;
+            --line: rgba(20, 22, 26, .09);
+            --bg: #e9ebee;
+            --glass: rgba(255, 255, 255, .62);
+            --glass-b: rgba(255, 255, 255, .85);
+            --dk: rgba(18, 20, 24, .88);
+            --dk-ink: #f2f3f5;
+            --dk-ink2: #a5aab4;
+            --cap: #fff;
+            --green: #1f9d63;
+            --amber: #c98a12;
+            --red: #d2453d;
+            --blue: #3b6fd4;
+            --ease: cubic-bezier(.2, .9, .3, 1);
+            --r: 18px;
+            --serif: 'Cormorant Garamond', Georgia, serif;
+            --sans: 'Jost', system-ui, sans-serif;
+            --sh: 0 1px 0 rgba(255, 255, 255, .9) inset, 0 10px 30px -12px rgba(30, 35, 45, .22)
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html {
+            scroll-behavior: smooth
+        }
+
+        body {
+            font-family: var(--sans);
+            font-size: 14px;
+            color: var(--ink);
+            background: var(--bg);
+            margin: 0;
+            min-height: 100vh;
+            overflow-x: hidden
+        }
+
+        .bg {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: radial-gradient(900px 600px at 10% -10%, #fff 0, transparent 60%), radial-gradient(800px 600px at 100% 10%, #d6dae0 0, transparent 60%), radial-gradient(700px 500px at 40% 110%, #f7f8fa 0, transparent 60%), linear-gradient(160deg, #eceef1, #d9dce2)
+        }
+
+        .bg::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            opacity: .35;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.25'/%3E%3C/svg%3E")
+        }
+
+        button {
+            font: inherit;
+            color: inherit;
+            cursor: pointer;
+            border: 0;
+            background: none;
+            padding: 0
+        }
+
+        input,
+        select,
+        textarea {
+            font: inherit;
+            color: inherit
+        }
+
+        .glass {
+            position: relative;
+            background: var(--glass);
+            backdrop-filter: blur(18px) saturate(1.4);
+            -webkit-backdrop-filter: blur(18px) saturate(1.4);
+            border-radius: var(--r);
+            box-shadow: var(--sh);
+            border: 1px solid rgba(255, 255, 255, .5)
+        }
+
+        .glass::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(145deg, rgba(255, 255, 255, .95), rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, .4));
+            -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none
+        }
+
+        .glass.dk {
+            background: var(--dk);
+            color: var(--dk-ink);
+            border-color: rgba(255, 255, 255, .08)
+        }
+
+        .glass.dk::after {
+            background: linear-gradient(145deg, rgba(255, 255, 255, .28), rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, .1))
+        }
+
+        /* shell */
+        .app {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 16px;
+            padding-block: 16px;
+            padding-left: max(16px, env(safe-area-inset-left, 0px));
+            padding-right: max(16px, env(safe-area-inset-right, 0px));
+            max-width: 1640px;
+            margin: auto
+        }
+
+        .side {
+            position: sticky;
+            top: 16px;
+            height: calc(100vh - 32px);
+            display: flex;
+            flex-direction: column;
+            padding: 18px 12px;
+            overflow: hidden
+        }
+
+        .logo {
+            font-family: var(--serif);
+            font-size: 26px;
+            letter-spacing: .18em;
+            font-weight: 600;
+            padding: 2px 10px 14px;
+            display: flex;
+            align-items: baseline;
+            gap: 8px
+        }
+
+        .logo small {
+            font: 500 9px var(--sans);
+            letter-spacing: .2em;
+            color: var(--dk-ink2);
+            border: 1px solid rgba(255, 255, 255, .2);
+            border-radius: 99px;
+            padding: 2px 7px
+        }
+
+        .nav {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            overflow-y: auto;
+            flex: 1;
+            min-height: 0
+        }
+
+        .nav .sec {
+            font-size: 10px;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            color: var(--dk-ink2);
+            padding: 14px 12px 6px
+        }
+
+        .nav a {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            padding: 10px 12px;
+            border-radius: 12px;
+            color: var(--dk-ink2);
+            text-decoration: none;
+            transition: all .25s var(--ease);
+            font-weight: 400
+        }
+
+        .nav a svg {
+            width: 18px;
+            height: 18px;
+            flex: none;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 1.6;
+            stroke-linecap: round;
+            stroke-linejoin: round
+        }
+
+        .nav a .n {
+            margin-left: auto;
+            font-size: 11px;
+            background: rgba(255, 255, 255, .14);
+            padding: 1px 8px;
+            border-radius: 99px;
+            color: #fff
+        }
+
+        .nav a.on {
+            background: var(--cap);
+            color: var(--ink);
+            box-shadow: 0 6px 16px -6px rgba(0, 0, 0, .5)
+        }
+
+        .nav a.on .n {
+            background: var(--ink);
+            color: #fff
+        }
+
+        @media(hover:hover) {
+            .nav a:not(.on):hover {
+                background: rgba(255, 255, 255, .1);
+                color: #fff;
+                transform: translateX(2px)
+            }
+        }
+
+        .me {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            padding: 12px 8px 2px;
+            border-top: 1px solid rgba(255, 255, 255, .1);
+            margin-top: 8px
+        }
+
+        .av {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #fff, #b9bec7);
+            color: var(--ink);
+            display: grid;
+            place-items: center;
+            font-weight: 600;
+            font-size: 12px;
+            flex: none
+        }
+
+        .me b {
+            display: block;
+            font-weight: 500;
+            font-size: 13px
+        }
+
+        .me span {
+            font-size: 11px;
+            color: var(--dk-ink2)
+        }
+
+        .main {
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 16px
+        }
+
+        .top {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            position: sticky;
+            top: 16px;
+            z-index: 30
+        }
+
+        .ib.burger {
+            display: none;
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            place-items: center
+        }
+
+        .srch {
+            flex: 1;
+            max-width: 460px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, .7);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 0 12px;
+            height: 38px;
+            color: var(--ink3);
+            text-align: left;
+            white-space: nowrap;
+            overflow: hidden
+        }
+
+        .srch kbd {
+            margin-left: auto;
+            font: 500 10px var(--sans);
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            padding: 2px 6px;
+            background: #fff
+        }
+
+        .sp {
+            flex: 1
+        }
+
+        .pill {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 0 12px;
+            height: 38px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, .7);
+            border: 1px solid var(--line);
+            white-space: nowrap;
+            font-size: 13px
+        }
+
+        .ib {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            background: rgba(255, 255, 255, .7);
+            border: 1px solid var(--line);
+            position: relative;
+            transition: transform .2s var(--ease)
+        }
+
+        .ib:active,
+        .btn:active {
+            transform: scale(.96)
+        }
+
+        .ib i {
+            position: absolute;
+            top: 7px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--red);
+            border: 2px solid #fff
+        }
+
+        svg.i {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 1.6;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            flex: none
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            height: 38px;
+            padding: 0 16px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, .75);
+            border: 1px solid var(--line);
+            font-weight: 500;
+            white-space: nowrap;
+            transition: all .25s var(--ease)
+        }
+
+        .btn.p {
+            background: linear-gradient(180deg, #2b2e34, #101216);
+            color: #fff;
+            border-color: #000;
+            box-shadow: 0 8px 18px -8px rgba(0, 0, 0, .6)
+        }
+
+        .btn.d {
+            color: var(--red)
+        }
+
+        .btn.sm {
+            height: 30px;
+            padding: 0 11px;
+            font-size: 12px;
+            border-radius: 9px
+        }
+
+        .btn[disabled] {
+            opacity: .4;
+            pointer-events: none
+        }
+
+        @media(hover:hover) {
+
+            .btn:hover,
+            .ib:hover {
+                transform: scale(1.03)
+            }
+
+            .btn.p:hover {
+                background: #000
+            }
+        }
+
+        .view {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            min-width: 0
+        }
+
+        .ph {
+            display: flex;
+            align-items: flex-end;
+            gap: 12px;
+            flex-wrap: wrap
+        }
+
+        .ph h1 {
+            font-family: var(--serif);
+            font-weight: 600;
+            font-size: 34px;
+            margin: 0;
+            line-height: 1
+        }
+
+        .ph p {
+            margin: 4px 0 0;
+            color: var(--ink3)
+        }
+
+        .ph .sp {
+            flex: 1
+        }
+
+        .card {
+            padding: 18px;
+            min-width: 0
+        }
+
+        .card h3 {
+            margin: 0 0 2px;
+            font-size: 15px;
+            font-weight: 500
+        }
+
+        .card .sub {
+            color: var(--ink3);
+            font-size: 12px;
+            margin-bottom: 12px
+        }
+
+        .row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap
+        }
+
+        .grid {
+            display: grid;
+            gap: 16px
+        }
+
+        .kpis {
+            grid-template-columns: repeat(4, 1fr)
+        }
+
+        .g2 {
+            grid-template-columns: 1.75fr 1fr
+        }
+
+        .g3 {
+            grid-template-columns: 1fr 1fr 1fr
+        }
+
+        .ge {
+            grid-template-columns: 1fr 1fr
+        }
+
+        .kpi .l {
+            font-size: 12px;
+            color: var(--ink3);
+            display: flex;
+            justify-content: space-between
+        }
+
+        .kpi .v {
+            font-family: var(--serif);
+            font-size: 36px;
+            font-weight: 600;
+            line-height: 1.1;
+            margin: 6px 0 4px;
+            white-space: nowrap
+        }
+
+        .kpi .d {
+            font-size: 12px;
+            display: flex;
+            gap: 6px;
+            align-items: center
+        }
+
+        .up {
+            color: var(--green)
+        }
+
+        .dn {
+            color: var(--red)
+        }
+
+        .spark {
+            height: 34px;
+            width: 100%;
+            margin-top: 8px
+        }
+
+        /* seg */
+        .seg {
+            display: inline-flex;
+            background: rgba(20, 22, 26, .07);
+            border-radius: 12px;
+            padding: 3px;
+            gap: 2px;
+            max-width: 100%;
+            overflow-x: auto
+        }
+
+        .seg button {
+            padding: 6px 13px;
+            border-radius: 9px;
+            font-size: 13px;
+            color: var(--ink2);
+            white-space: nowrap;
+            transition: all .25s var(--ease)
+        }
+
+        .seg button.on {
+            background: var(--cap);
+            color: var(--ink);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .12);
+            font-weight: 500
+        }
+
+        .seg button .c {
+            font-size: 11px;
+            color: var(--ink3);
+            margin-left: 5px
+        }
+
+        /* table */
+        .tw {
+            overflow-x: auto;
+            margin: 0 -6px
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 640px
+        }
+
+        th {
+            text-align: left;
+            font-weight: 500;
+            font-size: 11px;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: var(--ink3);
+            padding: 8px 10px;
+            white-space: nowrap
+        }
+
+        td {
+            padding: 10px;
+            border-top: 1px solid var(--line);
+            white-space: nowrap;
+            vertical-align: middle
+        }
+
+        tr.cl {
+            cursor: pointer;
+            transition: background .2s
+        }
+
+        @media(hover:hover) {
+            tr.cl:hover {
+                background: rgba(255, 255, 255, .55)
+            }
+        }
+
+        td.r,
+        th.r {
+            text-align: right
+        }
+
+        .bd {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11.5px;
+            font-weight: 500;
+            padding: 3px 9px;
+            border-radius: 99px
+        }
+
+        .b-g {
+            background: rgba(31, 157, 99, .13);
+            color: #157a4a
+        }
+
+        .b-a {
+            background: rgba(201, 138, 18, .15);
+            color: #8f600a
+        }
+
+        .b-b {
+            background: rgba(59, 111, 212, .13);
+            color: #2b55a8
+        }
+
+        .b-r {
+            background: rgba(210, 69, 61, .13);
+            color: #a8302a
+        }
+
+        .b-n {
+            background: rgba(20, 22, 26, .08);
+            color: var(--ink2)
+        }
+
+        .b-k {
+            background: #14161a;
+            color: #fff
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            flex: none
+        }
+
+        .dot.r {
+            background: var(--red);
+            box-shadow: 0 0 8px var(--red)
+        }
+
+        .dot.a {
+            background: var(--amber);
+            box-shadow: 0 0 8px var(--amber)
+        }
+
+        .dot.g {
+            background: var(--green);
+            box-shadow: 0 0 8px var(--green)
+        }
+
+        .thumb {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: linear-gradient(145deg, #fff, #bfc4cc);
+            display: grid;
+            place-items: center;
+            font-family: var(--serif);
+            font-weight: 700;
+            font-size: 15px;
+            flex: none;
+            overflow: hidden;
+            border: 1px solid var(--line)
+        }
+
+        .thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover
+        }
+
+        .cell {
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .cell b {
+            font-weight: 500;
+            display: block
+        }
+
+        .cell span {
+            font-size: 12px;
+            color: var(--ink3)
+        }
+
+        /* form */
+        .f {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            min-width: 0
+        }
+
+        .f>label {
+            font-size: 12px;
+            color: var(--ink2);
+            font-weight: 500
+        }
+
+        .in,
+        .ta {
+            height: 38px;
+            border-radius: 11px;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, .8);
+            padding: 0 12px;
+            width: 100%;
+            outline: none;
+            transition: box-shadow .2s, border-color .2s
+        }
+
+        .ta {
+            height: auto;
+            padding: 10px 12px;
+            resize: vertical;
+            min-height: 80px
+        }
+
+        .in:focus,
+        .ta:focus {
+            border-color: #14161a;
+            box-shadow: 0 0 0 3px rgba(20, 22, 26, .08)
+        }
+
+        .in.err {
+            border-color: var(--red)
+        }
+
+        .em {
+            color: var(--red);
+            font-size: 11.5px
+        }
+
+        .fg {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px
+        }
+
+        .dd {
+            position: relative
+        }
+
+        .dd>button {
+            width: 100%;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            border-radius: 11px;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, .8);
+            padding: 0 12px;
+            white-space: nowrap
+        }
+
+        .pop {
+            position: fixed;
+            z-index: 90;
+            background: rgba(255, 255, 255, .96);
+            backdrop-filter: blur(18px);
+            border-radius: 14px;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, .3);
+            border: 1px solid var(--line);
+            padding: 5px;
+            max-height: 300px;
+            overflow: auto;
+            animation: pin .2s var(--ease)
+        }
+
+        .pop button {
+            display: flex;
+            width: 100%;
+            text-align: left;
+            padding: 8px 11px;
+            border-radius: 9px;
+            gap: 8px;
+            align-items: center;
+            white-space: nowrap
+        }
+
+        .pop button.on {
+            background: var(--ink);
+            color: #fff
+        }
+
+        @media(hover:hover) {
+            .pop button:not(.on):hover {
+                background: rgba(20, 22, 26, .07)
+            }
+        }
+
+        @keyframes pin {
+            from {
+                opacity: 0;
+                transform: translateY(-6px) scale(.97)
+            }
+        }
+
+        .sw {
+            display: inline-block;
+            cursor: pointer;
+            width: 42px;
+            height: 24px;
+            border-radius: 99px;
+            background: rgba(20, 22, 26, .2);
+            position: relative;
+            transition: background .25s;
+            flex: none
+        }
+
+        .sw::after {
+            content: "";
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, .3);
+            transition: transform .3s var(--ease)
+        }
+
+        .sw.on {
+            background: var(--green)
+        }
+
+        .sw.on::after {
+            transform: translateX(18px)
+        }
+
+        .cb {
+            width: 18px;
+            height: 18px;
+            border-radius: 6px;
+            border: 1.5px solid var(--ink3);
+            display: inline-grid;
+            place-items: center;
+            background: #fff;
+            flex: none
+        }
+
+        .cb.on {
+            background: var(--ink);
+            border-color: var(--ink)
+        }
+
+        .cb.on::after {
+            content: "";
+            width: 8px;
+            height: 4px;
+            border-left: 2px solid #fff;
+            border-bottom: 2px solid #fff;
+            transform: rotate(-45deg) translate(1px, -1px)
+        }
+
+        .stp {
+            display: inline-flex;
+            align-items: center;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: #fff;
+            overflow: hidden
+        }
+
+        .stp button {
+            width: 28px;
+            height: 30px;
+            font-size: 16px
+        }
+
+        .stp input {
+            width: 46px;
+            text-align: center;
+            border: 0;
+            outline: 0;
+            height: 30px;
+            background: none
+        }
+
+        @media(hover:hover) {
+            .stp button:hover {
+                background: rgba(20, 22, 26, .07)
+            }
+        }
+
+        /* bars */
+        .bar {
+            height: 8px;
+            border-radius: 9px;
+            background: rgba(20, 22, 26, .08);
+            overflow: hidden
+        }
+
+        .bar i {
+            display: block;
+            height: 100%;
+            border-radius: 9px;
+            background: linear-gradient(90deg, #3a3e46, #14161a)
+        }
+
+        .tip {
+            position: absolute;
+            pointer-events: none;
+            background: var(--dk);
+            color: #fff;
+            padding: 6px 10px;
+            border-radius: 9px;
+            font-size: 12px;
+            white-space: nowrap;
+            transform: translate(-50%, -120%);
+            z-index: 5
+        }
+
+        .chart {
+            position: relative
+        }
+
+        .chart svg {
+            width: 100%;
+            height: auto;
+            display: block;
+            overflow: visible
+        }
+
+        .leg {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            font-size: 12px;
+            color: var(--ink2)
+        }
+
+        .leg i {
+            display: inline-block;
+            width: 9px;
+            height: 9px;
+            border-radius: 3px;
+            margin-right: 6px
+        }
+
+        /* overlays */
+        .ov {
+            position: fixed;
+            inset: 0;
+            z-index: 80;
+            background: rgba(15, 17, 21, .4);
+            backdrop-filter: blur(4px);
+            display: grid;
+            place-items: center;
+            padding: 16px;
+            animation: fade .2s
+        }
+
+        .ov.right {
+            place-items: stretch end;
+            padding: 0
+        }
+
+        .modal {
+            width: min(560px, 100%);
+            max-height: calc(100vh - 32px);
+            overflow: auto;
+            padding: 22px;
+            background: rgba(250, 251, 252, .96);
+            animation: pin .3s var(--ease)
+        }
+
+        .modal.w {
+            width: min(760px, 100%)
+        }
+
+        .drawer {
+            width: min(460px, 100%);
+            height: 100%;
+            overflow: auto;
+            padding: 22px;
+            background: rgba(250, 251, 252, .97);
+            border-radius: 0;
+            animation: slide .35s var(--ease)
+        }
+
+        .modal h2,
+        .drawer h2 {
+            font-family: var(--serif);
+            font-size: 26px;
+            margin: 0 0 4px;
+            font-weight: 600
+        }
+
+        .mf {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            margin-top: 18px;
+            flex-wrap: wrap
+        }
+
+        @keyframes fade {
+            from {
+                opacity: 0
+            }
+        }
+
+        @keyframes slide {
+            from {
+                transform: translateX(40px);
+                opacity: 0
+            }
+        }
+
+        .toast {
+            position: fixed;
+            bottom: max(22px, env(safe-area-inset-bottom, 0px));
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 120;
+            padding: 11px 18px;
+            border-radius: 14px;
+            animation: pin .3s var(--ease);
+            display: flex;
+            gap: 9px;
+            align-items: center;
+            max-width: calc(100% - 32px)
+        }
+
+        .savebar {
+            position: sticky;
+            bottom: 16px;
+            z-index: 25;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            padding: 10px 14px
+        }
+
+        .empty {
+            padding: 36px;
+            text-align: center;
+            color: var(--ink3)
+        }
+
+        .pg {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 12px;
+            color: var(--ink3);
+            font-size: 12px;
+            flex-wrap: wrap
+        }
+
+        .step {
+            display: flex;
+            gap: 0;
+            margin: 8px 0 4px;
+            overflow-x: auto
+        }
+
+        .step div {
+            flex: 1;
+            min-width: 90px;
+            text-align: center;
+            font-size: 12px;
+            color: var(--ink3);
+            position: relative;
+            padding-top: 24px
+        }
+
+        .step div::before {
+            content: "";
+            position: absolute;
+            top: 6px;
+            left: 50%;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #fff;
+            border: 2px solid var(--ink3);
+            transform: translateX(-50%);
+            z-index: 1
+        }
+
+        .step div::after {
+            content: "";
+            position: absolute;
+            top: 12px;
+            left: -50%;
+            width: 100%;
+            height: 2px;
+            background: var(--ink3);
+            opacity: .3
+        }
+
+        .step div:first-child::after {
+            display: none
+        }
+
+        .step div.done {
+            color: var(--ink)
+        }
+
+        .step div.done::before {
+            background: var(--ink);
+            border-color: var(--ink)
+        }
+
+        .step div.done::after {
+            background: var(--ink);
+            opacity: 1
+        }
+
+        .step div.cur::before {
+            box-shadow: 0 0 0 5px rgba(20, 22, 26, .12)
+        }
+
+        .tl {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-left: 16px;
+            border-left: 2px solid var(--line)
+        }
+
+        .tl div {
+            position: relative;
+            font-size: 13px
+        }
+
+        .tl div::before {
+            content: "";
+            position: absolute;
+            left: -22px;
+            top: 5px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--ink)
+        }
+
+        .tl small {
+            display: block;
+            color: var(--ink3);
+            font-size: 11.5px
+        }
+
+        .mq {
+            overflow: hidden;
+            white-space: nowrap;
+            background: linear-gradient(90deg, #d5d9df, #f6f7f9, #d5d9df);
+            border-radius: 12px;
+            padding: 9px 0;
+            font-size: 12px;
+            letter-spacing: .16em;
+            text-transform: uppercase
+        }
+
+        .mq span {
+            display: inline-block;
+            padding-left: 100%;
+            animation: mq 28s linear infinite
+        }
+
+        @keyframes mq {
+            to {
+                transform: translateX(-100%)
+            }
+        }
+
+        .mini {
+            display: flex;
+            flex-direction: column;
+            gap: 2px
+        }
+
+        .li {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            padding: 10px 0;
+            border-top: 1px solid var(--line)
+        }
+
+        .li:first-child {
+            border-top: 0
+        }
+
+        .li .g {
+            flex: 1;
+            min-width: 0
+        }
+
+        .li .g b {
+            font-weight: 500;
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap
+        }
+
+        .li .g span {
+            font-size: 12px;
+            color: var(--ink3)
+        }
+
+        .pv {
+            border-radius: 16px;
+            padding: 14px;
+            background: linear-gradient(160deg, #fff, #d8dce3);
+            border: 1px solid var(--line)
+        }
+
+        .scrim {
+            display: none
+        }
+
+        .mob-nav {
+            display: none
+        }
+
+        @media(max-width:1100px) {
+            .kpis {
+                grid-template-columns: 1fr 1fr
+            }
+
+            .g2,
+            .g3 {
+                grid-template-columns: 1fr
+            }
+
+            .g3 {
+                grid-template-columns: 1fr 1fr
+            }
+        }
+
+        @media(max-width:860px) {
+            .app {
+                grid-template-columns: 1fr
+            }
+
+            .side {
+                position: fixed;
+                left: 8px;
+                top: 8px;
+                bottom: 8px;
+                width: 270px;
+                z-index: 100;
+                height: auto;
+                transform: translateX(-110%);
+                transition: transform .35s var(--ease)
+            }
+
+            .side.open {
+                transform: none
+            }
+
+            .scrim.show {
+                display: block;
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, .4);
+                z-index: 95
+            }
+
+            .ib.burger {
+                display: grid
+            }
+
+            .srch kbd,
+            .pill.dt,
+            .btn.addp span {
+                display: none
+            }
+
+            .srch {
+                max-width: none
+            }
+
+            .top {
+                top: 8px
+            }
+
+            .ge,
+            .fg,
+            .g3 {
+                grid-template-columns: 1fr
+            }
+
+            .ph h1 {
+                font-size: 28px
+            }
+        }
+
+        @media(max-width:520px) {
+            .kpis {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px
+            }
+
+            .kpi .v {
+                font-size: 26px
+            }
+
+            .card {
+                padding: 14px
+            }
+
+            .srch span {
+                display: none
+            }
+
+            .srch {
+                flex: none;
+                width: 38px;
+                justify-content: center;
+                padding: 0
+            }
+
+            .rp {
+                display: none
+            }
+        }
+
+        * {
+            font-variant-numeric: lining-nums tabular-nums;
+            font-feature-settings: 'lnum' 1, 'tnum' 1
+        }
+
+        .kpi .v {
+            font-family: var(--sans);
+            font-weight: 500;
+            font-size: 30px;
+            letter-spacing: -.01em
+        }
+
+        .sc {
+            border-radius: 20px;
+            padding: 12px;
+            background: linear-gradient(160deg, rgba(255, 255, 255, .9), rgba(214, 218, 226, .8));
+            border: 1px solid rgba(255, 255, 255, .7);
+            box-shadow: 0 10px 24px -14px rgba(0, 0, 0, .3)
+        }
+
+        .sc .ph1 {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 16px;
+            border: 1px dashed rgba(20, 22, 26, .3);
+            background: radial-gradient(circle at 85% 90%, #c9ced8, transparent 55%), linear-gradient(145deg, #fff, #eceef2);
+            display: grid;
+            place-items: center;
+            overflow: hidden;
+            font-size: 11px;
+            letter-spacing: .16em;
+            color: var(--ink2)
+        }
+
+        .sc .ph1 img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover
+        }
+
+        .sc .hh {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #fff;
+            display: grid;
+            place-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .12)
+        }
+
+        .sc .br {
+            font-size: 11px;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            color: var(--ink2);
+            margin-top: 12px
+        }
+
+        .sc .nm {
+            font-family: var(--serif);
+            font-size: 25px;
+            font-weight: 500;
+            line-height: 1.15;
+            margin: 2px 0 8px
+        }
+
+        .sc .ch {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px
+        }
+
+        .sc .ch span,
+        .sc .in2 {
+            height: 30px;
+            border-radius: 99px;
+            border: 1px solid var(--line);
+            background: #fff;
+            display: grid;
+            place-items: center;
+            font-size: 12px
+        }
+
+        .sc .ch span.s {
+            background: linear-gradient(180deg, #2b2e34, #101216);
+            color: #fff;
+            border-color: #000
+        }
+
+        .sc .ch span.x {
+            text-decoration: line-through;
+            color: var(--ink3);
+            background: rgba(255, 255, 255, .5)
+        }
+
+        .sc .in2 {
+            grid-column: 1/-1;
+            height: 36px;
+            font-size: 13px;
+            letter-spacing: .06em;
+            font-weight: 500
+        }
+
+        .sc .ft {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 12px;
+            font-weight: 500
+        }
+
+        .sc .pl {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: linear-gradient(180deg, #2b2e34, #101216);
+            color: #fff;
+            display: grid;
+            place-items: center;
+            font-size: 20px
+        }
+
+        .pf {
+            grid-template-columns: 1.6fr 1fr;
+            align-items: start
+        }
+
+        .pvw {
+            position: sticky;
+            top: 90px
+        }
+
+        .sc {
+            max-width: 300px;
+            margin-inline: auto
+        }
+
+        @media(max-width:1100px) {
+            .pf {
+                grid-template-columns: minmax(0, 1fr)
+            }
+
+            .pvw {
+                position: static
+            }
+        }
+
+        .glass.dk {
+            border: 0;
+            box-shadow: 0 14px 34px -14px rgba(0, 0, 0, .55)
+        }
+
+        .glass.dk::after {
+            display: none
+        }
+
+        .lg {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding-block: 24px;
+            padding-left: max(16px, env(safe-area-inset-left, 0px));
+            padding-right: max(16px, env(safe-area-inset-right, 0px))
+        }
+
+        .lgc {
+            width: min(420px, 100%);
+            padding: 34px 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px
+        }
+
+        .lgc .lo {
+            font-family: var(--serif);
+            font-size: 38px;
+            letter-spacing: .2em;
+            font-weight: 600;
+            text-align: center;
+            line-height: 1
+        }
+
+        .lgc .lo small {
+            display: block;
+            font: 500 10px var(--sans);
+            letter-spacing: .3em;
+            color: var(--ink3);
+            margin-top: 8px
+        }
+
+        .lgc h2 {
+            font-family: var(--serif);
+            font-size: 26px;
+            font-weight: 600;
+            margin: 6px 0 0;
+            text-align: center
+        }
+
+        .lgc .sb {
+            text-align: center;
+            color: var(--ink3);
+            margin: -8px 0 4px
+        }
+
+        .lgc .in {
+            height: 44px
+        }
+
+        .pwb {
+            position: relative
+        }
+
+        .pwb .in {
+            padding-right: 44px
+        }
+
+        .pwb button {
+            position: absolute;
+            right: 4px;
+            top: 4px;
+            width: 36px;
+            height: 36px;
+            display: grid;
+            place-items: center;
+            border-radius: 10px;
+            color: var(--ink2)
+        }
+
+        .lgc .btn.p {
+            height: 46px;
+            width: 100%;
+            font-size: 15px
+        }
+
+        .lgc .err {
+            background: rgba(210, 69, 61, .1);
+            color: #a8302a;
+            border-radius: 11px;
+            padding: 9px 12px;
+            font-size: 13px
+        }
+
+        .lgc .lk {
+            color: var(--ink2);
+            font-size: 13px;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            cursor: pointer;
+            background: none
+        }
+
+        .lgc .demo {
+            border: 1px dashed var(--ink3);
+            border-radius: 12px;
+            padding: 10px 12px;
+            font-size: 12px;
+            color: var(--ink2);
+            line-height: 1.6
+        }
+
+        .lgc .sec {
+            font-size: 11px;
+            color: var(--ink3);
+            text-align: center;
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            align-items: center
+        }
+
+        .otp {
+            letter-spacing: .7em;
+            text-align: center;
+            font-size: 22px;
+            font-weight: 500;
+            padding-left: .7em !important
+        }
+
+        .shake {
+            animation: shake .4s
+        }
+
+        @keyframes shake {
+
+            20%,
+            60% {
+                transform: translateX(-8px)
+            }
+
+            40%,
+            80% {
+                transform: translateX(8px)
+            }
+        }
+
+        .lgo {
+            background: rgba(255, 255, 255, .1);
+            border-radius: 10px;
+            width: 32px;
+            height: 32px;
+            display: grid;
+            place-items: center;
+            margin-left: auto;
+            color: var(--dk-ink2);
+            flex: none
+        }
+
+        @media(hover:hover) {
+            .lgo:hover {
+                background: rgba(255, 255, 255, .2);
+                color: #fff
+            }
+        }
+    </style>
+    <div class="bg"></div>
+    <div id="login" class="lg" hidden></div>
+    <div class="app" id="app" hidden>
+        <aside class="side glass dk" id="side"></aside>
+        <div class="scrim" id="scrim" data-act="menu"></div>
+        <div class="main">
+            <header class="top glass">
+                <button class="ib burger" data-act="menu" aria-label="Menu"><svg class="i" viewBox="0 0 24 24">
+                        <path d="M4 7h16M4 12h16M4 17h16" />
+                    </svg></button>
+                <button class="srch" data-act="palette"><svg class="i" viewBox="0 0 24 24">
+                        <circle cx="11" cy="11" r="7" />
+                        <path d="m20 20-4-4" />
+                    </svg><span>Search orders, products…</span><kbd>⌘K</kbd></button>
+                <div class="sp"></div>
+                <div class="pill dt"><svg class="i" viewBox="0 0 24 24">
+                        <rect x="4" y="5" width="16" height="15" rx="3" />
+                        <path d="M4 10h16M9 3v4M15 3v4" />
+                    </svg>Wed, 28 Oct 2026</div>
+                <div class="rp" id="rolebox"></div>
+                <button class="ib" data-act="bell" aria-label="Alerts"><svg class="i" viewBox="0 0 24 24">
+                        <path d="M6 17V11a6 6 0 1 1 12 0v6l1.5 2h-15zM10 21h4" />
+                    </svg><i></i></button>
+                <button class="btn p addp" data-go="product-new"><svg class="i" viewBox="0 0 24 24">
+                        <path d="M12 5v14M5 12h14" />
+                    </svg><span>Add product</span></button>
+            </header>
+            <main class="view" id="view"></main>
+        </div>
+    </div>
+    <div id="ov"></div>
+    <div id="tz"></div>
+    <script>
+        /* ===== helpers ===== */
+        const $ = s => document.querySelector(s);
+        const N = n => Math.round(n).toLocaleString('en-IN');
+        const T = n => '৳' + N(n);
+        const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+        const IC = { dash: '<rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/>', orders: '<path d="M6 3h12l2 4v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7z"/><path d="M4 7h16M9 11a3 3 0 0 0 6 0"/>', prod: '<path d="M9 3h6v4l3 4v9a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-9l3-4z"/><path d="M9 7h6"/>', inv: '<path d="M3 8 12 3l9 5v8l-9 5-9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/>', cust: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5M16 4.5a3.5 3.5 0 0 1 0 7M18 14.8c2 .6 3.3 2.3 3.5 5"/>', promo: '<path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.3"/>', chart: '<path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/>', content: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 14h8"/>', gear: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>', staff: '<path d="M12 3 4 6v6c0 4.5 3.3 8 8 9 4.7-1 8-4.5 8-9V6z"/><path d="m9 12 2 2 4-4"/>', x: '<path d="M6 6l12 12M18 6 6 18"/>', chev: '<path d="m9 6 6 6-6 6"/>', dn: '<path d="m6 9 6 6 6-6"/>', plus: '<path d="M12 5v14M5 12h14"/>', trash: '<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>', edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/>', eye: '<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>', copy: '<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/>', back: '<path d="m15 6-6 6 6 6"/>', up: '<path d="M12 17V5M6 11l6-6 6 6"/>', srch: '<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>', img: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-8 8"/>', ok: '<path d="m5 12 5 5 9-10"/>' };
+        const ic = (n, c = '') => `<svg class="i ${c}" viewBox="0 0 24 24">${IC[n] || ''}</svg>`;
+        /* seeded RNG */
+        let _s = 20261028; const rnd = () => { _s = (_s * 1664525 + 1013904223) >>> 0; return _s / 4294967296 };
+        const pick = a => a[Math.floor(rnd() * a.length)];
+        const SZ = ['3ml', '5ml', '10ml', '15ml', 'Intake'];
+        const MUL = { '3ml': 1, '5ml': 1.6, '10ml': 2.9, '15ml': 4.1 };
+        /* perfumes: id,name,brand,cat,3ml price,intake price */
+        const P = [['creed-aventus', 'Aventus', 'Creed', 'Niche', 1450, 34500], ['dior-sauvage-edt', 'Sauvage EDT', 'Dior', 'Designer', 620, 12800], ['armaf-club-de-nuit-intense', 'Club de Nuit Intense', 'Armaf', 'Middle Eastern', 380, 6200], ['lattafa-art-of-universe', 'Art of Universe', 'Lattafa', 'Middle Eastern', 340, 5400], ['micallef-gntonic', 'GN Tonic', 'M. Micallef', 'Niche', 720, 15500], ['margiela-by-the-fireplace', 'By the Fireplace', 'Maison Margiela', 'Niche', 690, 14200], ['boss-bottled-absolute', 'Bottled Absolute', 'Hugo Boss', 'Designer', 480, 9800], ['dior-sauvage-edp', 'Sauvage EDP', 'Dior', 'Designer', 690, 14500], ['dior-homme-intense', 'Homme Intense', 'Dior', 'Designer', 700, 14800], ['azzaro-the-most-wanted', 'The Most Wanted', 'Azzaro', 'Designer', 560, 11500], ['armani-stronger-with-you-intensely', 'Stronger With You Intensely', 'Giorgio Armani', 'Designer', 590, 12200], ['rayhaan-nava-sol', 'Nava Sol', 'Rayhaan', 'Middle Eastern', 420, 7200], ['givenchy-gentleman-reserve-privee', 'Gentleman Réserve Privée', 'Givenchy', 'Designer', 640, 13200], ['paris-corner-rifaaqat-adorn', 'Rifaaqat Adorn', 'Paris Corner', 'Middle Eastern', 360, 5900], ['rasasi-hawas-boa', 'Hawas Boa', 'Rasasi', 'Middle Eastern', 450, 7800], ['rasasi-hawas-ice-freeze-cologne', 'Hawas Ice Freeze', 'Rasasi', 'Middle Eastern', 430, 7400], ['rasasi-hawas-og', 'Hawas for Him', 'Rasasi', 'Middle Eastern', 420, 7000], ['bujairami-sydney-hectic', 'Sydney Hectic', 'Bujairami', 'Middle Eastern', 390, 6400], ['essential-parfum-bois-imperial', 'Bois Impérial', 'Essential Parfums', 'Niche', 650, 13800], ['thameen-carved-oud', 'Carved Oud', 'Thameen', 'Niche', 980, 21500], ['acqua-di-parma-quercia', 'Quercia', 'Acqua di Parma', 'Niche', 760, 16500], ['afnan-supremacy-collector', 'Supremacy Collector', 'Afnan', 'Middle Eastern', 400, 6600], ['rasasi-hawas-ice', 'Hawas Ice', 'Rasasi', 'Middle Eastern', 430, 7500], ['acqua-di-parma-bergamotto', 'Bergamotto di Calabria', 'Acqua di Parma', 'Niche', 740, 16000], ['acqua-di-parma-cipresso', 'Cipresso di Toscana', 'Acqua di Parma', 'Niche', 740, 16000], ['junaid-sanaya', 'Sanaya', 'Junaid', 'Middle Eastern', 330, 5200]];
+        const PR = P.map(r => {
+            const st = {}; SZ.forEach(s => st[s] = s === 'Intake' ? Math.floor(rnd() * 4) : 8 + Math.floor(rnd() * 30));
+            const o = { id: r[0], name: r[1], brand: r[2], cat: r[3], p3: r[4], full: r[5], status: 'active', off: 0, tags: [], ov: {}, on: {}, stock: st, notes: '', sold: 0, desc: '' }; SZ.forEach(s => o.on[s] = true); return o
+        });
+        ['rasasi-hawas-ice', 'thameen-carved-oud', 'junaid-sanaya', 'givenchy-gentleman-reserve-privee'].forEach(id => { const p = PR.find(x => x.id === id); SZ.forEach(s => p.stock[s] = 0) });
+        const g = id => PR.find(p => p.id === id); g('creed-aventus').stock['15ml'] = 2; g('dior-homme-intense').stock['10ml'] = 3; g('dior-homme-intense').stock['15ml'] = 1; g('azzaro-the-most-wanted').stock['15ml'] = 2; g('dior-sauvage-edt').stock['3ml'] = 4; g('armaf-club-de-nuit-intense').stock['Intake'] = 0;
+        ['creed-aventus', 'dior-sauvage-edt', 'armaf-club-de-nuit-intense', 'lattafa-art-of-universe', 'azzaro-the-most-wanted'].forEach(i => g(i).tags.push('Best seller'));['rayhaan-nava-sol', 'paris-corner-rifaaqat-adorn', 'afnan-supremacy-collector'].forEach(i => g(i).tags.push('New'));
+        const price = (p, s) => { const b = p.ov && p.ov[s] ? p.ov[s] : s === 'Intake' ? p.full : Math.round(p.p3 * MUL[s] / 10) * 10; return p.off ? Math.round(b * (100 - p.off) / 100) : b };
+        /* customers */
+        const NM = ['Tanvir Ahmed', 'Sadia Rahman', 'Imran Hossain', 'Nusrat Jahan', 'Fahim Chowdhury', 'Mehedi Hasan', 'Tasnim Akter', 'Rafiul Karim', 'Sabbir Khan', 'Afrin Sultana', 'Jahid Hasan', 'Mim Islam', 'Arif Billah', 'Shakil Mahmud', 'Rumana Haque', 'Naimur Rahman', 'Ayesha Siddika', 'Zubayer Alam', 'Maruf Hossain', 'Labiba Noor', 'Hasib Sarker', 'Sumaiya Tabassum', 'Ridwan Kabir', 'Tahmid Aziz', 'Farhana Yasmin', 'Shihab Uddin', 'Nabila Karim', 'Omar Faruk', 'Priya Das', 'Kawsar Ali'];
+        const DIST = ['Dhaka', 'Dhaka', 'Dhaka', 'Dhaka', 'Chattogram', 'Chattogram', 'Sylhet', 'Rajshahi', 'Khulna', 'Cumilla', 'Gazipur', 'Narayanganj', 'Bogura', 'Rangpur'];
+        const CU = NM.map((n, i) => ({ id: 'C' + (100 + i), name: n, phone: '01' + pick(['7', '8', '9', '5', '3']) + String(Math.floor(rnd() * 1e8)).padStart(8, '0'), district: pick(DIST), notes: '' }));
+        /* orders */
+        const NOW = new Date('2026-10-28T20:30:00+06:00').getTime(), DAY = 864e5;
+        const ST = ['pending', 'confirmed', 'packed', 'shipped', 'delivered'];
+        const SC = { pending: 'b-a', confirmed: 'b-b', packed: 'b-b', shipped: 'b-n', delivered: 'b-g', cancelled: 'b-r' };
+        const PAY = ['COD', 'bKash', 'Nagad', 'Card'];
+        const fee = d => d === 'Dhaka' ? 70 : 130;
+        let OID = 1000; const OR = [];
+        for (let i = 0; i < 270; i++) {
+            const day = Math.floor(Math.pow(rnd(), .85) * 30), t = NOW - day * DAY - Math.floor(rnd() * DAY * .8);
+            const c = pick(CU), n = 1 + Math.floor(rnd() * rnd() * 3.2), items = [];
+            for (let k = 0; k < n; k++) { const p = pick(PR), w = rnd(); const s = w < .34 ? '3ml' : w < .6 ? '5ml' : w < .8 ? '10ml' : w < .93 ? '15ml' : 'Intake'; items.push({ pid: p.id, size: s, qty: 1 + (rnd() < .15 ? 1 : 0) }) }
+            let st; const age = (NOW - t) / DAY; if (age > 7) st = rnd() < .06 ? 'cancelled' : 'delivered'; else if (age > 4) st = pick(['delivered', 'delivered', 'shipped', 'cancelled']); else if (age > 2) st = pick(['shipped', 'packed', 'delivered']); else if (age > 1) st = pick(['confirmed', 'packed', 'pending']); else st = pick(['pending', 'pending', 'confirmed']);
+            const sub = items.reduce((a, x) => a + price(g(x.pid), x.size) * x.qty, 0);
+            OR.push({ id: 'TD-' + (++OID), t, cid: c.id, items, status: st, pay: pick(PAY.concat(['COD', 'COD', 'bKash'])), paid: false, sub, disc: 0, code: '', fee: fee(c.district), district: c.district, addr: 'House ' + (1 + Math.floor(rnd() * 80)) + ', Road ' + (1 + Math.floor(rnd() * 20)) + ', ' + c.district, courier: '', track: '', note: '', tl: [[t, 'Order placed']], src: pick(['Website', 'Website', 'Facebook', 'Instagram']) });
+        }
+        OR.forEach(o => {
+            o.paid = o.pay !== 'COD' || o.status === 'delivered'; o.total = o.sub + o.fee - o.disc; if (o.status !== 'pending' && o.status !== 'cancelled') { o.courier = pick(['Pathao', 'Steadfast', 'RedX']); if (ST.indexOf(o.status) >= 3) o.track = o.courier.slice(0, 2).toUpperCase() + Math.floor(rnd() * 9e7 + 1e7) }
+            const i = ST.indexOf(o.status); for (let k = 1; k <= i; k++)o.tl.push([o.t + k * 3.5e6, 'Marked ' + ST[k]]); if (o.status === 'cancelled') o.tl.push([o.t + 36e5, 'Order cancelled']);
+            o.items.forEach(x => { if (o.status !== 'cancelled') g(x.pid).sold += x.qty })
+        });
+        OR.sort((a, b) => b.t - a.t);
+        let PROMO = [{ code: 'TADIC10', type: 'pct', val: 10, min: 1000, limit: 200, used: 64, exp: '2026-12-31', on: true, note: 'Welcome offer' }, { code: 'DIWALI15', type: 'pct', val: 15, min: 2500, limit: 100, used: 38, exp: '2026-11-15', on: true, note: 'Festive sale' }, { code: 'FREESHIP', type: 'ship', val: 0, min: 1500, limit: 500, used: 121, exp: '2026-12-31', on: true, note: 'Free delivery' }, { code: 'FLAT200', type: 'flat', val: 200, min: 2000, limit: 50, used: 50, exp: '2026-10-20', on: false, note: 'Ended' }];
+        let STAFF = [{ id: 1, name: 'Rakibul Islam Asif', email: 'kuddusislam001@gmail.com', role: 'Owner', on: true, last: 'Just now' }, { id: 2, name: 'Nadia Karim', email: 'nadia@tadic.club', role: 'Manager', on: true, last: '2h ago' }, { id: 3, name: 'Sohan Mia', email: 'sohan@tadic.club', role: 'Staff', on: true, last: 'Yesterday' }];
+        let LOG = [['Rakibul', 'Updated price of Aventus 10ml', '2h ago'], ['Nadia', 'Marked TD-1268 as shipped', '3h ago'], ['Sohan', 'Packed TD-1265', '5h ago'], ['Rakibul', 'Created promo DIWALI15', 'Yesterday'], ['Nadia', 'Restocked Sauvage EDT 5ml (+20)', 'Yesterday'], ['Rakibul', 'Updated announcement bar', '2 days ago'], ['Sohan', 'Cancelled TD-1231 (customer request)', '3 days ago']];
+        const ROLES = { Owner: ['dashboard', 'orders', 'products', 'inventory', 'customers', 'promotions', 'analytics', 'content', 'store-settings', 'staff'], Manager: ['dashboard', 'orders', 'products', 'inventory', 'customers', 'promotions', 'analytics', 'content'], Staff: ['dashboard', 'orders', 'inventory'] };
+        const PERM = [['View dashboard & analytics', 1, 1, 0], ['Manage orders', 1, 1, 1], ['Add / edit products', 1, 1, 0], ['Update stock', 1, 1, 1], ['Delete products', 1, 0, 0], ['Promotions & content', 1, 1, 0], ['Store settings & payments', 1, 0, 0], ['Staff & roles', 1, 0, 0]];
+        let CONT = { ann: ['Free delivery over ৳1,500 in Dhaka', 'Authentic decants · sealed & sprayed fresh', '3ml · 5ml · 10ml · 15ml · Intake'], annOn: true, secs: [{ k: 'hero', n: 'Hero banner', on: true }, { k: 'best', n: 'Best sellers', on: true }, { k: 'new', n: 'New arrivals', on: true }, { k: 'cat', n: 'Shop by category', on: true }, { k: 'guide', n: 'Size guide', on: false }], hero: { h: 'Wear the room.', s: 'Decants from the world’s finest houses.', cta: 'Shop now' }, pages: { Shipping: 'Dhaka 1–2 days, outside Dhaka 3–5 days. Delivery via Pathao / Steadfast.', Returns: 'Sealed decants can be returned within 3 days if unopened.', Privacy: 'We only use your details to deliver your order.' } };
+        let SET = { name: 'TADIĆ', email: 'hello@tadic.club', phone: '01700-000000', addr: 'Dhanmondi, Dhaka', inDhaka: 70, outDhaka: 130, free: 1500, cod: true, bkash: true, nagad: true, card: false, bkNo: '01700-000000', low: 5, hide: true, deduct: 'confirm', nOrder: true, nLow: true, nDaily: false };
+        const LOGADD = t => LOG.unshift([S.role === 'Owner' ? 'Rakibul' : S.role, t, 'Just now']);
+        const stockOf = p => SZ.filter(s => p.on[s]).reduce((a, s) => a + p.stock[s], 0);
+        const lowList = () => { const a = []; PR.forEach(p => SZ.forEach(s => { if (p.on[s] && p.stock[s] <= SET.low) a.push({ p, s, q: p.stock[s] }) })); return a.sort((a, b) => a.q - b.q) };
+        const cust = id => CU.find(c => c.id === id);
+        const ago = t => { const d = (NOW - t) / 36e5; return d < 1 ? Math.max(1, Math.round(d * 60)) + 'm ago' : d < 24 ? Math.round(d) + 'h ago' : Math.round(d / 24) + 'd ago' };
+        const fd = t => new Date(t).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+        const fdt = t => new Date(t).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', hour12: true });
+        const itemsTxt = o => o.items.map(x => g(x.pid) ? g(x.pid).name + ' ' + x.size + (x.qty > 1 ? ' ×' + x.qty : '') : '?').join(', ');
+        const bdg = s => `<span class="bd ${SC[s]}">${s[0].toUpperCase() + s.slice(1)}</span>`;
+        const init = n => n.split(' ').map(w => w[0]).slice(0, 2).join('');
+        const live = o => o.status !== 'cancelled';
+        /* ===== state & infra ===== */
+        const S = { role: 'Owner', rng: 7, of: { tab: 'all', q: '', pay: 'all', days: 30, page: 1 }, pf: { q: '', cat: 'all', st: 'all', sel: new Set() }, inv: { tab: 'all', q: '', d: {} }, cf: { tab: 'all', q: '' }, pm: {}, af: 30, ps: 'general', sf: 'all', draft: null };
+        const NAV = [['dashboard', 'Dashboard', 'dash', 'Overview'], ['orders', 'Orders', 'orders', 'Sales'], ['products', 'Products', 'prod'], ['inventory', 'Inventory', 'inv'], ['customers', 'Customers', 'cust'], ['promotions', 'Promotions', 'promo', 'Growth'], ['analytics', 'Analytics', 'chart'], ['content', 'Content', 'content', 'Store'], ['store-settings', 'Settings', 'gear'], ['staff', 'Staff & roles', 'staff']];
+        const DDH = {}; let DDO = {};
+        function toast(m, err) { const e = document.createElement('div'); e.className = 'toast glass dk'; e.innerHTML = (err ? '<span class="dot r"></span>' : '<span class="dot g"></span>') + esc(m); $('#tz').innerHTML = ''; $('#tz').append(e); clearTimeout(toast.t); toast.t = setTimeout(() => e.remove(), 2600) }
+        function modal(html, cls = '', side) { $('#ov').innerHTML = `<div class="ov ${side ? 'right' : ''}" data-act="ovclose"><div class="${side ? 'drawer' : 'modal glass'} ${cls}" data-stop>${html}</div></div>` }
+        function closeM() { $('#ov').innerHTML = '' }
+        function confirmM(title, msg, label, fn) { CF = fn; modal(`<h2>${esc(title)}</h2><p style="color:var(--ink2)">${msg}</p><div class="mf"><button class="btn" data-act="ovclose2">Cancel</button><button class="btn p" data-act="cfok">${esc(label)}</button></div>`) }
+        let CF = null;
+        function dd(key, opts, val, cb, w) { DDH[key] = cb; DDO[key] = opts; const cur = opts.find(o => String(o[0]) === String(val)); return `<div class="dd" ${w ? `style="width:${w}px"` : ''}><button data-act="dd" data-k="${key}"><span>${esc(cur ? cur[1] : 'Select')}</span>${ic('dn')}</button></div>` }
+        function openDD(btn) { closePop(); const k = btn.dataset.k, r = btn.getBoundingClientRect(), o = DDO[k], cur = btn.querySelector('span').textContent; const p = document.createElement('div'); p.className = 'pop'; p.id = 'pop'; p.style.minWidth = r.width + 'px'; p.style.left = Math.min(r.left, innerWidth - r.width - 12) + 'px'; const below = innerHeight - r.bottom > 220; p.style[below ? 'top' : 'bottom'] = (below ? r.bottom + 6 : innerHeight - r.top + 6) + 'px'; p.innerHTML = o.map(x => `<button class="${x[1] === cur ? 'on' : ''}" data-act="pick" data-k="${k}" data-v="${esc(x[0])}">${esc(x[1])}</button>`).join(''); document.body.append(p) }
+        function closePop() { const p = $('#pop'); if (p) p.remove() }
+        function lineSVG(vals, labels, fmt, h = 200) {
+            const W = 600, H = h, pl = 6, pt = 14, pb = 24, mx = Math.max(...vals, 1) * 1.12, n = vals.length; const X = i => pl + (W - 2 * pl) * (n == 1 ? .5 : i / (n - 1)), Y = v => pt + (H - pt - pb) * (1 - v / mx);
+            const pts = vals.map((v, i) => [X(i), Y(v)]); let d = `M${pts[0][0]},${pts[0][1]}`; for (let i = 0; i < n - 1; i++) { const p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2; d += `C${p1[0] + (p2[0] - p0[0]) / 6},${p1[1] + (p2[1] - p0[1]) / 6} ${p2[0] - (p3[0] - p1[0]) / 6},${p2[1] - (p3[1] - p1[1]) / 6} ${p2[0]},${p2[1]}` }
+            const area = d + `L${X(n - 1)},${H - pb}L${X(0)},${H - pb}Z`; let grid = ''; for (let i = 0; i < 4; i++) { const y = pt + (H - pt - pb) * i / 3; grid += `<line x1="0" x2="${W}" y1="${y}" y2="${y}" stroke="rgba(20,22,26,.08)"/>` }
+            const step = Math.ceil(n / 7); const lb = labels.map((l, i) => i % step == 0 || i == n - 1 ? `<text x="${X(i)}" y="${H - 6}" font-size="11" fill="#80858f" text-anchor="middle">${l}</text>` : '').join('');
+            const dots = pts.map((p, i) => `<circle cx="${p[0]}" cy="${p[1]}" r="12" fill="transparent" data-t="${esc(labels[i] + ' · ' + fmt(vals[i]))}"/>`).join('');
+            return `<div class="chart"><svg viewBox="0 0 ${W} ${H}"><defs><linearGradient id="ag" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#14161a" stop-opacity=".22"/><stop offset="1" stop-color="#14161a" stop-opacity="0"/></linearGradient></defs>${grid}<path d="${area}" fill="url(#ag)"/><path d="${d}" fill="none" stroke="#14161a" stroke-width="2.2" stroke-linecap="round"/>${lb}${dots}</svg></div>`
+        }
+        function spark(vals) { const W = 120, H = 34, mx = Math.max(...vals, 1), mn = Math.min(...vals), n = vals.length; const pts = vals.map((v, i) => `${i / (n - 1) * W},${H - 3 - (H - 6) * (v - mn) / ((mx - mn) || 1)}`); return `<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><polyline points="${pts.join(' ')}" fill="none" stroke="#14161a" stroke-width="1.6" stroke-linejoin="round" opacity=".55"/></svg>` }
+        function donut(parts) {
+            const tot = parts.reduce((a, p) => a + p[1], 0) || 1, cols = ['#14161a', '#5b606a', '#9aa0ab', '#cfd3da']; let a = -90, out = ''; parts.forEach((p, i) => { const ang = p[1] / tot * 360, r = 52, c = 64, x1 = c + r * Math.cos(a * Math.PI / 180), y1 = c + r * Math.sin(a * Math.PI / 180), x2 = c + r * Math.cos((a + ang - .5) * Math.PI / 180), y2 = c + r * Math.sin((a + ang - .5) * Math.PI / 180); out += `<path d="M${x1},${y1}A${r},${r} 0 ${ang > 180 ? 1 : 0} 1 ${x2},${y2}" fill="none" stroke="${cols[i % 4]}" stroke-width="16"/>`; a += ang });
+            return `<div class="row" style="gap:18px"><svg width="128" height="128" viewBox="0 0 128 128">${out}<text x="64" y="62" text-anchor="middle" font-family="Jost" font-size="24" font-weight="500">${N(tot)}</text><text x="64" y="78" text-anchor="middle" font-size="10" fill="#80858f">total</text></svg><div class="leg" style="flex-direction:column;gap:8px">${parts.map((p, i) => `<span><i style="background:${cols[i % 4]}"></i>${esc(p[0])} · ${Math.round(p[1] / tot * 100)}%</span>`).join('')}</div></div>`
+        }
+        function hbars(rows, fmt = N) { const mx = Math.max(...rows.map(r => r[1]), 1); return rows.map(r => `<div style="margin:10px 0"><div class="row" style="justify-content:space-between;margin-bottom:5px"><span>${esc(r[0])}</span><b style="font-weight:500">${fmt(r[1])}</b></div><div class="bar"><i style="width:${r[1] / mx * 100}%"></i></div></div>`).join('') }
+        const inR = (o, d) => o.t >= NOW - d * DAY;
+        function series(d, f) { const vals = [], lb = []; if (d === 1) { for (let i = 7; i >= 0; i--) { const e = NOW - i * 3 * 36e5, s = e - 3 * 36e5; vals.push(OR.filter(o => live(o) && o.t > s && o.t <= e).reduce((a, o) => a + f(o), 0)); lb.push(new Date(e).toLocaleTimeString('en-GB', { hour: '2-digit', hour12: false }) + 'h') } } else for (let i = d - 1; i >= 0; i--) { const e = NOW - i * DAY, s = e - DAY; vals.push(OR.filter(o => live(o) && o.t > s && o.t <= e).reduce((a, o) => a + f(o), 0)); lb.push(fd(e)) } return { vals, lb } }
+        function renderShell() {
+            const r = ROLES[S.role]; let h = `<div class="logo">TADIĆ<small>ADMIN</small></div><nav class="nav">`; let last = ''; NAV.forEach(n => { if (!r.includes(n[0])) return; if (n[3] && n[3] !== last) { h += `<div class="sec">${n[3]}</div>`; last = n[3] } const c = n[0] === 'orders' ? OR.filter(o => o.status === 'pending').length : n[0] === 'inventory' ? lowList().length : 0; h += `<a href="#${n[0]}" data-nav="${n[0]}">${ic(n[2])}<span>${n[1]}</span>${c ? `<b class="n">${c}</b>` : ''}</a>` });
+            h += `</nav><div class="me"><div class="av">RA</div><div><b>Rakibul Asif</b><span>${S.role}</span></div><button class="lgo" data-act="logout" aria-label="Log out" title="Log out">${ic("back")}</button></div>`; $('#side').innerHTML = h;
+            $('#rolebox').innerHTML = dd('role', [['Owner', 'Owner'], ['Manager', 'Manager'], ['Staff', 'Staff']], S.role, v => { S.role = v; toast('Previewing as ' + v); renderShell(); route() }, 130)
+        }
+        function syncNav() { const k = (location.hash.slice(1).split('-')[0]); const map = { order: 'orders', product: 'products', store: 'store-settings' }; const cur = map[k] || k || 'dashboard'; document.querySelectorAll('[data-nav]').forEach(a => a.classList.toggle('on', a.dataset.nav === cur)) }
+        const V = {};
+        function route() {
+            closePop(); let h = location.hash.slice(1) || 'dashboard', key = h, arg = ''; if (h.startsWith('order-')) { key = 'order'; arg = h.slice(6) } else if (h.startsWith('product-')) { key = 'product'; arg = h.slice(8) }
+            const need = { order: 'orders', product: 'products' }[key] || key; if (!V[key]) { key = 'dashboard'; need = 'dashboard' }
+            if (!ROLES[S.role].includes(need)) { $('#view').innerHTML = `<div class="card glass empty"><h3 style="font-family:var(--serif);font-size:26px;color:var(--ink)">No access</h3>Your role (${S.role}) can’t open this page.<br><br><button class="btn" data-go="dashboard">Back to dashboard</button></div>`; syncNav(); return }
+            $('#view').innerHTML = V[key](arg); syncNav(); $('#side').classList.remove('open'); $('#scrim').classList.remove('show'); scrollTo(0, 0); if (V[key + '_after']) V[key + '_after'](arg)
+        }
+        const redo = () => { const y = scrollY; $('#view').innerHTML = V[(location.hash.slice(1) || 'dashboard').startsWith('order-') ? 'order' : (location.hash.slice(1)).startsWith('product-') ? 'product' : (location.hash.slice(1) || 'dashboard')](location.hash.slice(1).replace(/^(order|product)-/, '')); scrollTo(0, y) };
+        function pageHead(t, s, right = '') { return `<div class="ph"><div><h1>${t}</h1><p>${s}</p></div><div class="sp"></div>${right}</div>` }
+        /* ===== Dashboard ===== */
+        V.dashboard = () => {
+            const d = S.rng, cur = OR.filter(o => live(o) && inR(o, d)), prev = OR.filter(o => live(o) && o.t < NOW - d * DAY && o.t >= NOW - 2 * d * DAY); const rev = a => a.reduce((s, o) => s + o.total, 0);
+            const dl = (a, b) => b ? Math.round((a - b) / b * 100) : 0; const cs = new Set(cur.map(o => o.cid)).size, ps = new Set(prev.map(o => o.cid)).size; const aov = cur.length ? rev(cur) / cur.length : 0, paov = prev.length ? rev(prev) / prev.length : 0;
+            const kp = [['Revenue', T(rev(cur)), dl(rev(cur), rev(prev)), series(d, o => o.total).vals], ['Orders', N(cur.length), dl(cur.length, prev.length), series(d, o => 1).vals], ['Avg. order value', T(aov), dl(aov, paov), series(d, o => o.total).vals.map(v => v + 1)], ['Customers', N(cs), dl(cs, ps), series(d, o => 1).vals.map(v => v * 1.2)]];
+            const sr = series(d, o => o.total); const cnt = {}; ST.concat('cancelled').forEach(s => cnt[s] = OR.filter(o => o.status === s).length); const tot = OR.length;
+            const pc = { pending: '#c98a12', confirmed: '#3b6fd4', packed: '#6b87c9', shipped: '#8a8f99', delivered: '#1f9d63', cancelled: '#d2453d' };
+            return pageHead('Good evening, Rakib', 'Here’s how TADIĆ is doing.', `<div class="seg">${[[1, 'Today'], [7, '7 days'], [30, '30 days']].map(r => `<button class="${d === r[0] ? 'on' : ''}" data-act="rng" data-v="${r[0]}">${r[1]}</button>`).join('')}</div>`) +
+                `<div class="grid kpis">${kp.map(k => `<div class="card glass kpi"><div class="l">${k[0]}</div><div class="v">${k[1]}</div><div class="d ${k[2] >= 0 ? 'up' : 'dn'}">${k[2] >= 0 ? '▲' : '▼'} ${Math.abs(k[2])}% <span style="color:var(--ink3)">vs prev.</span></div>${spark(k[3])}</div>`).join('')}</div>
+ <div class="grid g2"><div class="card glass"><h3>Revenue</h3><div class="sub">${d === 1 ? 'Last 24 hours' : 'Last ' + d + ' days'} · hover for details</div>${lineSVG(sr.vals, sr.lb, T)}</div>
+ <div class="card glass"><h3>Order pipeline</h3><div class="sub">${tot} orders overall</div><div style="display:flex;height:12px;border-radius:9px;overflow:hidden;margin:12px 0">${Object.keys(cnt).map(s => `<i style="width:${cnt[s] / tot * 100}%;background:${pc[s]}"></i>`).join('')}</div>${Object.keys(cnt).map(s => `<div class="li" style="padding:7px 0"><span class="dot" style="background:${pc[s]}"></span><div class="g">${s[0].toUpperCase() + s.slice(1)}</div><b style="font-weight:500">${cnt[s]}</b></div>`).join('')}<button class="btn sm" style="margin-top:10px" data-go="orders">Open orders</button></div></div>
+ <div class="grid g2"><div class="card glass"><div class="row" style="justify-content:space-between"><h3>Recent orders</h3><button class="btn sm" data-go="orders">View all</button></div><div class="tw"><table><tr><th>Order</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th></tr>${OR.slice(0, 7).map(o => `<tr class="cl" data-go="order-${o.id}"><td><b style="font-weight:500">${o.id}</b></td><td>${esc(cust(o.cid).name)}</td><td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;color:var(--ink2)">${esc(itemsTxt(o))}</td><td>${T(o.total)}</td><td>${bdg(o.status)}</td></tr>`).join('')}</table></div></div>
+ <div class="card glass"><div class="row" style="justify-content:space-between"><h3>Stock alerts</h3><button class="btn sm" data-go="inventory">Manage</button></div><div class="sub">At or below ${SET.low} units</div>${lowList().slice(0, 7).map(a => `<div class="li"><span class="dot ${a.q === 0 ? 'r' : 'a'}"></span><div class="g"><b>${esc(a.p.name)}</b><span>${a.s} · ${a.q === 0 ? 'Out of stock' : a.q + ' left'}</span></div></div>`).join('') || '<div class="empty">All stocked up ✓</div>'}</div></div>`
+        };
+        V.dashboard_after = () => { };
+        /* ===== Orders ===== */
+        const PGZ = 12;
+        function ordersFiltered() { const f = S.of, q = f.q.toLowerCase(); return OR.filter(o => (f.tab === 'all' || o.status === f.tab) && (f.pay === 'all' || o.pay === f.pay) && inR(o, f.days) && (!q || o.id.toLowerCase().includes(q) || cust(o.cid).name.toLowerCase().includes(q) || cust(o.cid).phone.includes(q))) }
+        function ordList() {
+            const f = S.of, a = ordersFiltered(), pages = Math.max(1, Math.ceil(a.length / PGZ)); f.page = Math.min(f.page, pages); const s = a.slice((f.page - 1) * PGZ, f.page * PGZ);
+            return `<div class="tw"><table><tr><th>Order</th><th>Date</th><th>Customer</th><th>Items</th><th>Payment</th><th class="r">Total</th><th>Status</th></tr>${s.map(o => `<tr class="cl" data-go="order-${o.id}"><td><b style="font-weight:500">${o.id}</b></td><td>${fdt(o.t)}</td><td>${esc(cust(o.cid).name)}<br><span style="font-size:12px;color:var(--ink3)">${esc(o.district)}</span></td><td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;color:var(--ink2)">${esc(itemsTxt(o))}</td><td>${o.pay} ${o.paid ? '<span class="bd b-g">Paid</span>' : '<span class="bd b-a">Due</span>'}</td><td class="r">${T(o.total)}</td><td>${bdg(o.status)}</td></tr>`).join('') || `<tr><td colspan="7" class="empty">No orders match.</td></tr>`}</table></div>
+ <div class="pg"><span>${a.length} orders · page ${f.page}/${pages}</span><div class="row"><button class="btn sm" data-act="opg" data-v="-1" ${f.page <= 1 ? 'disabled' : ''}>Prev</button><button class="btn sm" data-act="opg" data-v="1" ${f.page >= pages ? 'disabled' : ''}>Next</button></div></div>`
+        }
+        V.orders = () => {
+            const f = S.of; const base = OR.filter(o => inR(o, f.days)); const c = s => s === 'all' ? base.length : base.filter(o => o.status === s).length;
+            return pageHead('Orders', 'Track every order from placed to delivered.', `<button class="btn p" data-act="neworder">${ic('plus')}Manual order</button>`) +
+                `<div class="card glass"><div class="row" style="justify-content:space-between;margin-bottom:12px"><div class="seg">${['all'].concat(ST, 'cancelled').map(s => `<button class="${f.tab === s ? 'on' : ''}" data-act="otab" data-v="${s}">${s === 'all' ? 'All' : s[0].toUpperCase() + s.slice(1)}<span class="c">${c(s)}</span></button>`).join('')}</div></div>
+ <div class="row" style="margin-bottom:8px"><div style="flex:1;min-width:200px"><input class="in" id="oq" placeholder="Search order ID, name or phone" value="${esc(f.q)}" data-act="osearch"></div>${dd('opay', [['all', 'All payments']].concat(PAY.map(p => [p, p])), f.pay, v => { f.pay = v; f.page = 1; redo() }, 160)}${dd('odays', [[1, 'Today'], [7, 'Last 7 days'], [30, 'Last 30 days']], f.days, v => { f.days = +v; f.page = 1; redo() }, 160)}</div><div id="ol">${ordList()}</div></div>`
+        };
+        V.order = id => {
+            const o = OR.find(x => x.id === id); if (!o) return pageHead('Not found', 'No such order.', '<button class="btn" data-go="orders">Back</button>'); const c = cust(o.cid), i = ST.indexOf(o.status), nx = ST[i + 1];
+            return `<div class="row"><button class="btn sm" data-go="orders">${ic('back')}Orders</button></div>` + pageHead(o.id, `${fdt(o.t)} · via ${o.src}`, `${bdg(o.status)}`) +
+                `<div class="card glass"><div class="step">${ST.map((s, k) => `<div class="${o.status === 'cancelled' ? '' : k <= i ? 'done' : ''} ${k === i ? 'cur' : ''}">${s[0].toUpperCase() + s.slice(1)}</div>`).join('')}</div><div class="row" style="margin-top:14px">${o.status === 'cancelled' ? '<span class="bd b-r">Cancelled</span>' : nx ? `<button class="btn p" data-act="adv" data-id="${o.id}">Mark as ${nx}</button>` : '<span class="bd b-g">Completed</span>'}${!o.paid && live(o) ? `<button class="btn" data-act="paid" data-id="${o.id}">Mark paid</button>` : ''}${live(o) && o.status !== 'delivered' ? `<button class="btn d" data-act="cancelo" data-id="${o.id}">Cancel order</button>` : ''}<button class="btn" data-act="inv" data-id="${o.id}">${ic('copy')}Copy summary</button></div></div>
+ <div class="grid g2"><div class="card glass"><h3>Items</h3>${o.items.map(x => { const p = g(x.pid); return `<div class="li"><div class="thumb">${p.name[0]}</div><div class="g"><b>${esc(p.name)}</b><span>${p.brand} · ${x.size} × ${x.qty}</span></div><b style="font-weight:500">${T(price(p, x.size) * x.qty)}</b></div>` }).join('')}
+ <div style="margin-top:12px;display:flex;flex-direction:column;gap:6px"><div class="row" style="justify-content:space-between"><span>Subtotal</span>${T(o.sub)}</div><div class="row" style="justify-content:space-between"><span>Delivery</span>${T(o.fee)}</div>${o.disc ? `<div class="row" style="justify-content:space-between"><span>Discount (${o.code})</span>−${T(o.disc)}</div>` : ''}<div class="row" style="justify-content:space-between;font-size:18px"><b>Total</b><b>${T(o.total)}</b></div><div class="row" style="justify-content:space-between"><span>Payment</span><span>${o.pay} · ${o.paid ? 'Paid' : 'Due on delivery'}</span></div></div></div>
+ <div class="card glass"><h3>Customer</h3><div class="li"><div class="av" style="background:linear-gradient(145deg,#2b2e34,#101216);color:#fff">${init(c.name)}</div><div class="g"><b>${esc(c.name)}</b><span>${c.phone}</span></div><button class="btn sm" data-act="cust" data-id="${c.id}">Profile</button></div><div class="sub" style="margin-top:10px">Ship to</div><div>${esc(o.addr)}</div>
+ <div class="fg" style="margin-top:14px"><div class="f"><label>Courier</label>${dd('cour', [['', '—'], ['Pathao', 'Pathao'], ['Steadfast', 'Steadfast'], ['RedX', 'RedX']], o.courier, v => { o.courier = v; toast('Courier saved') })}</div><div class="f"><label>Tracking ID</label><input class="in" value="${esc(o.track)}" data-act="track" data-id="${o.id}" placeholder="Optional"></div></div></div></div>
+ <div class="grid ge"><div class="card glass"><h3>Internal note</h3><textarea class="ta" data-act="onote" data-id="${o.id}" placeholder="Only staff can see this">${esc(o.note)}</textarea></div><div class="card glass"><h3>Timeline</h3><div class="tl" style="margin-top:12px">${o.tl.slice().reverse().map(t => `<div>${esc(t[1])}<small>${fdt(t[0])}</small></div>`).join('')}</div></div></div>`
+        };
+        function setStatus(o, ns) {
+            const was = o.status; if (was === 'pending' && ns !== 'pending' && ns !== 'cancelled') { o.items.forEach(x => { g(x.pid).stock[x.size] = Math.max(0, g(x.pid).stock[x.size] - x.qty) }) }
+            if (ns === 'cancelled' && was !== 'pending') { o.items.forEach(x => { g(x.pid).stock[x.size] += x.qty }) }
+            o.status = ns; o.tl.push([Date.now() > NOW ? Date.now() : NOW, ns === 'cancelled' ? 'Order cancelled' : 'Marked ' + ns]); if (ns === 'delivered') o.paid = true; LOGADD(`${ns === 'cancelled' ? 'Cancelled' : 'Marked ' + ns} ${o.id}`)
+        }
+        /* ===== Products ===== */
+        const CATS = ['Designer', 'Niche', 'Middle Eastern', 'Discovery sets'];
+        const th = p => `<div class="thumb">${p.img ? `<img src="${p.img}" alt="">` : esc(p.name[0])}</div>`;
+        const stBd = p => ({ active: '<span class="bd b-g">Active</span>', hidden: '<span class="bd b-n">Hidden</span>', draft: '<span class="bd b-a">Draft</span>' }[p.status]);
+        const stockBd = p => { const s = stockOf(p); return s === 0 ? '<span class="bd b-r"><span class="dot r"></span>Out of stock</span>' : s <= SET.low * 3 ? `<span class="bd b-a">${s} units</span>` : `<span class="bd b-g">${s} units</span>` };
+        function prodFiltered() { const f = S.pf, q = f.q.toLowerCase(); return PR.filter(p => (f.cat === 'all' || p.cat === f.cat) && (f.st === 'all' || p.status === f.st) && (!q || (p.name + ' ' + p.brand).toLowerCase().includes(q))) }
+        function prodList() {
+            const a = prodFiltered(), f = S.pf, all = a.length && a.every(p => f.sel.has(p.id));
+            return (f.sel.size ? `<div class="row glass dk" style="padding:10px 14px;margin-bottom:10px;border-radius:14px"><b style="font-weight:500">${f.sel.size} selected</b><div class="sp"></div><button class="btn sm" data-act="bulk" data-v="active">Show</button><button class="btn sm" data-act="bulk" data-v="hidden">Hide</button><button class="btn sm d" data-act="bulk" data-v="del">Delete</button></div>` : '') +
+                `<div class="tw"><table><tr><th style="width:30px"><span class="cb ${all ? 'on' : ''}" data-act="selall"></span></th><th>Product</th><th>Category</th><th>From</th><th>Stock</th><th>Status</th><th></th></tr>${a.map(p => `<tr><td><span class="cb ${f.sel.has(p.id) ? 'on' : ''}" data-act="sel" data-id="${p.id}"></span></td><td><div class="cell" style="cursor:pointer" data-go="product-${p.id}">${th(p)}<div><b>${esc(p.name)}</b><span>${esc(p.brand)}${p.tags.map(t => ' · ' + t).join('')}</span></div></div></td><td>${p.cat}</td><td>${T(price(p, '3ml'))}${p.off ? ` <span class="bd b-r">-${p.off}%</span>` : ''}</td><td>${stockBd(p)}</td><td>${stBd(p)}</td><td class="r"><button class="btn sm" data-go="product-${p.id}">${ic('edit')}Edit</button> <button class="btn sm d" data-act="delp" data-id="${p.id}" aria-label="Delete">${ic('trash')}</button></td></tr>`).join('') || `<tr><td colspan="7" class="empty">No products found.</td></tr>`}</table></div><div class="pg"><span>${a.length} of ${PR.length} products</span></div>`
+        }
+        V.products = () => { const f = S.pf; return pageHead('Products', `${PR.length} perfumes in your catalogue.`, `<button class="btn p" data-go="product-new">${ic('plus')}Add product</button>`) + `<div class="card glass"><div class="row" style="margin-bottom:12px"><div style="flex:1;min-width:200px"><input class="in" id="pq" data-act="psearch" placeholder="Search name or brand" value="${esc(f.q)}"></div>${dd('pcat', [['all', 'All categories']].concat(CATS.map(c => [c, c])), f.cat, v => { f.cat = v; redoList() }, 180)}${dd('pst', [['all', 'All status'], ['active', 'Active'], ['hidden', 'Hidden'], ['draft', 'Draft']], f.st, v => { f.st = v; redoList() }, 150)}</div><div id="pl">${prodList()}</div></div>` };
+        const redoList = () => { const e = $('#pl'); if (e) e.innerHTML = prodList() };
+        function delProducts(ids) { confirmM(ids.length > 1 ? `Delete ${ids.length} products?` : 'Delete this product?', 'This removes it from the store and cannot be undone. Hiding it instead keeps the data.', 'Delete', () => { ids.forEach(id => { const i = PR.findIndex(p => p.id === id); if (i > -1) PR.splice(i, 1); S.pf.sel.delete(id) }); LOGADD(`Deleted ${ids.length} product(s)`); closeM(); toast('Deleted'); if (location.hash.startsWith('#product-')) location.hash = 'products'; else { renderShell(); redo() } }) }
+        /* product form */
+        const mk = () => { const st = {}, on = {}; SZ.forEach(s => { st[s] = 0; on[s] = true }); return { id: '', name: '', brand: '', cat: 'Designer', p3: 0, full: 0, status: 'active', off: 0, tags: [], on, stock: st, ov: {}, desc: '', sold: 0, img: '' } };
+        V.product = id => {
+            const isN = id === 'new', src = isN ? mk() : PR.find(p => p.id === id); if (!src) return pageHead('Not found', '', '<button class="btn" data-go="products">Back</button>');
+            S.draft = JSON.parse(JSON.stringify(src)); S.draft._new = isN; return prodForm()
+        };
+        function prodForm() {
+            const d = S.draft; return `<div class="row"><button class="btn sm" data-go="products">${ic('back')}Products</button></div>` + pageHead(d._new ? 'New product' : esc(d.name || 'Product'), d._new ? 'Add a perfume to your store.' : 'Edit details, sizes and pricing.', `<button class="btn" data-go="products">Discard</button><button class="btn p" data-act="savep">Save product</button>`) +
+                `<div class="grid pf"><div class="view">
+ <div class="card glass"><h3>Basics</h3><div class="fg" style="margin-top:10px"><div class="f"><label>Name *</label><input class="in" data-f="name" value="${esc(d.name)}" placeholder="e.g. Aventus"><span class="em" id="e-name"></span></div><div class="f"><label>Brand *</label><input class="in" data-f="brand" value="${esc(d.brand)}" placeholder="e.g. Creed"><span class="em" id="e-brand"></span></div><div class="f"><label>Category</label>${dd('fcat', CATS.map(c => [c, c]), d.cat, v => { d.cat = v; pvUp() })}</div><div class="f"><label>Status</label>${dd('fst', [['active', 'Active — visible'], ['hidden', 'Hidden'], ['draft', 'Draft']], d.status, v => { d.status = v; pvUp() })}</div></div><div class="f" style="margin-top:12px"><label>Description</label><textarea class="ta" data-f="desc" placeholder="Notes, mood, occasion…">${esc(d.desc)}</textarea></div></div>
+ <div class="card glass"><h3>Sizes, pricing & stock</h3><div class="sub">Leave 5/10/15ml price on auto, or type your own.</div><div class="tw"><table style="min-width:520px"><tr><th>Size</th><th>On sale</th><th>Price (৳)</th><th>Stock</th></tr>${SZ.map(s => `<tr><td><b style="font-weight:500">${s === 'Intake' ? 'Intake (full bottle)' : s}</b></td><td><span class="sw ${d.on[s] ? 'on' : ''}" data-act="szon" data-s="${s}"></span></td><td>${s === '3ml' ? `<input class="in" style="width:110px" type="number" min="0" data-f="p3" value="${d.p3 || ''}">` : s === 'Intake' ? `<input class="in" style="width:110px" type="number" min="0" data-f="full" value="${d.full || ''}">` : `<input class="in" style="width:110px" type="number" min="0" data-ov="${s}" value="${d.ov[s] || ''}" placeholder="${Math.round(d.p3 * MUL[s] / 10) * 10 || 'auto'}">`}</td><td><div class="stp"><button data-act="fst" data-s="${s}" data-d="-1">−</button><input type="number" min="0" data-sq="${s}" value="${d.stock[s]}"><button data-act="fst" data-s="${s}" data-d="1">+</button></div></td></tr>`).join('')}</table></div><span class="em" id="e-price"></span></div>
+ <div class="card glass"><h3>Tags & discount</h3><div class="row" style="margin:10px 0">${['Best seller', 'New', 'Limited'].map(t => `<button class="btn sm ${d.tags.includes(t) ? 'p' : ''}" data-act="ftag" data-t="${t}">${t}</button>`).join('')}</div><div class="f" style="max-width:180px"><label>Discount %</label><input class="in" type="number" min="0" max="90" data-f="off" value="${d.off || ''}" placeholder="0"></div></div></div>
+ <div class="view pvw"><div class="card glass"><h3>Photo</h3><div class="row" style="margin:10px 0"><div class="thumb" style="width:70px;height:70px;font-size:26px" id="pimg">${d.img ? `<img src="${d.img}" alt="">` : esc((d.name || '?')[0])}</div><label class="btn sm" style="cursor:pointer">${ic('img')}Upload<input type="file" accept="image/*" id="pfile" hidden></label>${d.img ? '<button class="btn sm d" data-act="rmimg">Remove</button>' : ''}</div></div>
+ <div class="card glass"><h3>Storefront preview</h3><div class="sub">How the card looks to customers</div><div id="pv">${pvHTML()}</div></div></div></div>`
+        }
+        function pvHTML() { const d = S.draft, ss = SZ.filter(s => d.on[s] && s !== 'Intake'), first = ss.find(s => d.stock[s] > 0) || ss[0]; return `<div class="sc"><div class="ph1">${d.img ? `<img src="${d.img}" alt="">` : '[PHOTO]'}<span class="hh">${ic('plus').replace('M12 5v14M5 12h14', 'M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.500-7 10-7 10z')}</span></div><div class="br">${esc(d.brand || 'Brand')}</div><div class="nm">${esc(d.name || 'Perfume name')}</div><div class="ch">${ss.map(s => `<span class="${s === first ? 's' : ''} ${d.stock[s] <= 0 ? 'x' : ''}">${s}</span>`).join('')}${d.on.Intake ? `<span class="in2 ${d.stock.Intake <= 0 ? 'x' : ''}">Intake</span>` : ''}</div><div class="ft"><span>${T(price(d, first || '3ml'))}${d.off ? ` <span class="bd b-r">-${d.off}%</span>` : ''}${d.status !== 'active' ? ` <span class="bd b-n">${d.status}</span>` : ''}</span><span class="pl">+</span></div></div>` }
+        const pvUp = () => { const e = $('#pv'); if (e) e.innerHTML = pvHTML() };
+        function saveProduct() {
+            const d = S.draft; let ok = true; const er = (k, m) => { const e = $('#e-' + k); if (e) e.textContent = m; ok = ok && !m }; er('name', d.name.trim() ? '' : 'Name is required'); er('brand', d.brand.trim() ? '' : 'Brand is required'); er('price', d.p3 > 0 && d.full > 0 ? '' : 'Set a 3ml price and an Intake price'); if (!ok) { toast('Please fix the highlighted fields', 1); return }
+            d.name = d.name.trim(); const slug = d.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + d.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+            if (d._new) { d.id = slug.replace(/^-|-$/g, ''); if (PR.some(p => p.id === d.id)) d.id += '-' + PR.length; delete d._new; PR.unshift(d); LOGADD('Added product ' + d.name) } else { const i = PR.findIndex(p => p.id === S.draft.id); delete d._new; PR[i] = d; LOGADD('Updated ' + d.name) }
+            toast('Product saved'); renderShell(); location.hash = 'products'
+        }
+        /* ===== Inventory ===== */
+        function invRows() { const f = S.inv, q = f.q.toLowerCase(); return PR.filter(p => (!q || (p.name + p.brand).toLowerCase().includes(q)) && (f.tab === 'all' || SZ.some(s => { const v = cv(p, s); return p.on[s] && (f.tab === 'out' ? v === 0 : v <= SET.low) }))) }
+        const cv = (p, s) => { const k = p.id + '|' + s; return k in S.inv.d ? S.inv.d[k] : p.stock[s] };
+        function invList() { const a = invRows(); return `<div class="tw"><table style="min-width:760px"><tr><th>Product</th>${SZ.map(s => `<th>${s}</th>`).join('')}</tr>${a.map(p => `<tr><td><div class="cell">${th(p)}<div><b>${esc(p.name)}</b><span>${esc(p.brand)}</span></div></div></td>${SZ.map(s => { if (!p.on[s]) return '<td style="color:var(--ink3)">—</td>'; const v = cv(p, s), k = p.id + '|' + s; return `<td><div class="stp" style="${v === 0 ? 'border-color:var(--red)' : v <= SET.low ? 'border-color:var(--amber)' : ''}"><button data-act="istp" data-k="${k}" data-d="-1">−</button><input type="number" min="0" value="${v}" data-act="iin" data-k="${k}"><button data-act="istp" data-k="${k}" data-d="1">+</button></div></td>` }).join('')}</tr>`).join('') || '<tr><td colspan="6" class="empty">Nothing here.</td></tr>'}</table></div>` }
+        function invBar() { const n = Object.keys(S.inv.d).length; return n ? `<div class="savebar glass dk"><span class="dot a"></span><b style="font-weight:500">${n} unsaved change${n > 1 ? 's' : ''}</b><div class="sp"></div><button class="btn sm" data-act="idisc">Discard</button><button class="btn sm" style="background:#fff;color:#000" data-act="isave">Save stock</button></div>` : '' }
+        V.inventory = () => { const f = S.inv, low = lowList(); return pageHead('Inventory', 'Size-wise stock. Low stock threshold: ' + SET.low + ' units.', `<span class="bd b-a">${low.filter(x => x.q > 0).length} low</span><span class="bd b-r">${low.filter(x => x.q === 0).length} out</span>`) + `<div class="card glass"><div class="row" style="margin-bottom:12px;justify-content:space-between"><div class="seg">${[['all', 'All'], ['low', 'Low or out'], ['out', 'Out of stock']].map(t => `<button class="${f.tab === t[0] ? 'on' : ''}" data-act="itab" data-v="${t[0]}">${t[1]}</button>`).join('')}</div><div style="flex:1;max-width:300px;min-width:180px"><input class="in" data-act="isearch" placeholder="Search product" value="${esc(f.q)}"></div></div><div id="il">${invList()}</div></div><div id="isb">${invBar()}</div>` };
+        const invUp = () => { const l = $('#il'), b = $('#isb'); if (l) l.innerHTML = invList(); if (b) b.innerHTML = invBar() };
+        /* ===== Customers ===== */
+        function cstat(c) { const os = OR.filter(o => o.cid === c.id), lv = os.filter(live); return { os, n: lv.length, sp: lv.reduce((a, o) => a + o.total, 0), last: os[0] ? os[0].t : 0 } }
+        const ctag = s => s.sp >= 15000 || s.n >= 6 ? 'VIP' : s.n >= 2 ? 'Repeat' : 'New';
+        function custList() {
+            const f = S.cf, q = f.q.toLowerCase(); const a = CU.map(c => ({ c, s: cstat(c) })).map(x => ({ ...x, tag: ctag(x.s) })).filter(x => (f.tab === 'all' || x.tag === f.tab) && (!q || x.c.name.toLowerCase().includes(q) || x.c.phone.includes(q))).sort((a, b) => b.s.sp - a.s.sp);
+            return `<div class="tw"><table><tr><th>Customer</th><th>District</th><th>Orders</th><th class="r">Spent</th><th>Last order</th><th>Tag</th></tr>${a.map(x => `<tr class="cl" data-act="cust" data-id="${x.c.id}"><td><div class="cell"><div class="av" style="background:linear-gradient(145deg,#2b2e34,#101216);color:#fff">${init(x.c.name)}</div><div><b>${esc(x.c.name)}</b><span>${x.c.phone}</span></div></div></td><td>${x.c.district}</td><td>${x.s.n}</td><td class="r">${T(x.s.sp)}</td><td>${x.s.last ? ago(x.s.last) : '—'}</td><td><span class="bd ${x.tag === 'VIP' ? 'b-k' : x.tag === 'Repeat' ? 'b-b' : 'b-n'}">${x.tag}</span></td></tr>`).join('') || '<tr><td colspan="6" class="empty">No customers.</td></tr>'}</table></div>`
+        }
+        V.customers = () => { const f = S.cf; return pageHead('Customers', CU.length + ' customers · VIP = ৳15,000+ spent or 6+ orders.') + `<div class="card glass"><div class="row" style="margin-bottom:12px;justify-content:space-between"><div class="seg">${['all', 'VIP', 'Repeat', 'New'].map(t => `<button class="${f.tab === t ? 'on' : ''}" data-act="ctab" data-v="${t}">${t[0].toUpperCase() + t.slice(1)}</button>`).join('')}</div><div style="flex:1;max-width:300px;min-width:180px"><input class="in" data-act="csearch" placeholder="Search name or phone" value="${esc(f.q)}"></div></div><div id="cl">${custList()}</div></div>` };
+        function custDrawer(id) { const c = cust(id), s = cstat(c); modal(`<div class="row" style="justify-content:space-between"><h2>${esc(c.name)}</h2><button class="ib" data-act="ovclose2">${ic('x')}</button></div><div class="sub" style="color:var(--ink3)">${c.phone} · ${c.district}</div><div class="grid" style="grid-template-columns:1fr 1fr 1fr;gap:10px;margin:14px 0"><div class="card glass" style="padding:12px"><div class="sub" style="margin:0">Orders</div><b style="font-family:var(--sans);font-weight:500;font-size:22px">${s.n}</b></div><div class="card glass" style="padding:12px"><div class="sub" style="margin:0">Spent</div><b style="font-family:var(--sans);font-weight:500;font-size:22px">${T(s.sp)}</b></div><div class="card glass" style="padding:12px"><div class="sub" style="margin:0">AOV</div><b style="font-family:var(--sans);font-weight:500;font-size:22px">${T(s.n ? s.sp / s.n : 0)}</b></div></div><h3 style="margin:0 0 6px;font-size:15px;font-weight:500">Orders</h3>${s.os.slice(0, 8).map(o => `<div class="li" style="cursor:pointer" data-go="order-${o.id}"><div class="g"><b>${o.id}</b><span>${fd(o.t)} · ${esc(itemsTxt(o))}</span></div>${bdg(o.status)}</div>`).join('')}<div class="f" style="margin-top:16px"><label>Private note</label><textarea class="ta" data-act="cnote" data-id="${c.id}" placeholder="Prefers woody scents, DM on Instagram…">${esc(c.notes)}</textarea></div>`, '', true) }
+        /* ===== Promotions ===== */
+        const pdesc = p => p.type === 'pct' ? p.val + '% off' : p.type === 'flat' ? T(p.val) + ' off' : 'Free delivery';
+        const pexp = p => p.exp < '2026-10-28' || p.used >= p.limit;
+        V.promotions = () => pageHead('Promotions', 'Discount codes customers can use at checkout.', `<button class="btn p" data-act="newpromo">${ic('plus')}New code</button>`) + `<div class="grid g3">${PROMO.map((p, i) => `<div class="card glass"><div class="row" style="justify-content:space-between"><span style="font:600 20px var(--serif);letter-spacing:.1em;border:1.5px dashed var(--ink3);padding:3px 12px;border-radius:10px">${esc(p.code)}</span><span class="sw ${p.on && !pexp(p) ? 'on' : ''}" data-act="ptog" data-i="${i}"></span></div><div style="font-size:18px;margin:12px 0 2px">${pdesc(p)}</div><div class="sub">Min. order ${T(p.min)} · ${p.note || ''}</div><div class="row" style="justify-content:space-between;font-size:12px;color:var(--ink2);margin-bottom:6px"><span>${p.used} / ${p.limit} used</span><span>${pexp(p) ? '<span class="bd b-r">Ended</span>' : 'Expires ' + p.exp}</span></div><div class="bar"><i style="width:${Math.min(100, p.used / p.limit * 100)}%"></i></div><div class="row" style="margin-top:14px"><button class="btn sm" data-act="editpromo" data-i="${i}">${ic('edit')}Edit</button><button class="btn sm d" data-act="delpromo" data-i="${i}">Delete</button></div></div>`).join('')}</div>`;
+        function promoModal(i) { const p = i >= 0 ? { ...PROMO[i] } : { code: '', type: 'pct', val: 10, min: 1000, limit: 100, used: 0, exp: '2026-12-31', on: true, note: '' }; S.pm = { ...p, i }; modal(`<h2>${i >= 0 ? 'Edit code' : 'New promo code'}</h2><div class="fg" style="margin-top:12px"><div class="f"><label>Code *</label><input class="in" data-pm="code" value="${esc(p.code)}" placeholder="SAVE10" style="text-transform:uppercase"><span class="em" id="e-pc"></span></div><div class="f"><label>Type</label>${dd('ptype', [['pct', 'Percent off'], ['flat', 'Flat amount'], ['ship', 'Free delivery']], p.type, v => { S.pm.type = v })}</div><div class="f"><label>Value</label><input class="in" type="number" min="0" data-pm="val" value="${p.val}"></div><div class="f"><label>Min. order (৳)</label><input class="in" type="number" min="0" data-pm="min" value="${p.min}"></div><div class="f"><label>Usage limit</label><input class="in" type="number" min="1" data-pm="limit" value="${p.limit}"></div><div class="f"><label>Expires</label><input class="in" type="date" data-pm="exp" value="${p.exp}"></div></div><div class="f" style="margin-top:12px"><label>Internal note</label><input class="in" data-pm="note" value="${esc(p.note)}"></div><div class="mf"><button class="btn" data-act="ovclose2">Cancel</button><button class="btn p" data-act="savepromo">Save code</button></div>`) }
+        /* ===== Analytics ===== */
+        V.analytics = () => {
+            const d = S.af, a = OR.filter(o => live(o) && inR(o, d)), sr = series(d, o => o.total), rev = a.reduce((s, o) => s + o.total, 0); const by = (f, v) => { const m = {}; a.forEach(o => f(o).forEach(([k, x]) => m[k] = (m[k] || 0) + x)); return Object.entries(m).sort((a, b) => b[1] - a[1]) };
+            const sizes = by(o => o.items.map(x => [x.size, x.qty])), perf = by(o => o.items.map(x => [g(x.pid).name, price(g(x.pid), x.size) * x.qty])).slice(0, 6), cat = by(o => o.items.map(x => [g(x.pid).cat, price(g(x.pid), x.size) * x.qty])), dist = by(o => [[o.district, 1]]).slice(0, 6), pay = by(o => [[o.pay, 1]]);
+            return pageHead('Analytics', 'What sells, where, and how people pay.', `<div class="seg">${[7, 30].map(r => `<button class="${d === r ? 'on' : ''}" data-act="arng" data-v="${r}">${r} days</button>`).join('')}</div>`) +
+                `<div class="grid kpis">${[['Revenue', T(rev)], ['Orders', a.length], ['Units sold', N(a.reduce((s, o) => s + o.items.reduce((q, x) => q + x.qty, 0), 0))], ['Cancel rate', Math.round(OR.filter(o => inR(o, d) && !live(o)).length / Math.max(1, OR.filter(o => inR(o, d)).length) * 100) + '%']].map(k => `<div class="card glass kpi"><div class="l">${k[0]}</div><div class="v">${k[1]}</div></div>`).join('')}</div>
+ <div class="card glass"><h3>Revenue trend</h3><div class="sub">Daily revenue, last ${d} days</div>${lineSVG(sr.vals, sr.lb, T, 220)}</div>
+ <div class="grid ge"><div class="card glass"><h3>Top perfumes</h3><div class="sub">By revenue</div>${hbars(perf, T)}</div><div class="card glass"><h3>Sales by size</h3><div class="sub">Units sold — shows which decant size customers prefer</div>${hbars(sizes)}</div></div>
+ <div class="grid g3"><div class="card glass"><h3>Category mix</h3><div class="sub">Share of revenue</div>${donut(cat.slice(0, 4))}</div><div class="card glass"><h3>Payment methods</h3><div class="sub">Share of orders</div>${donut(pay.slice(0, 4))}</div><div class="card glass"><h3>Top districts</h3><div class="sub">Orders</div>${hbars(dist)}</div></div>`
+        };
+        /* ===== Content ===== */
+        const mqHTML = () => `<div class="mq"><span>${CONT.ann.filter(Boolean).join('  ✦  ') || '—'}</span></div>`;
+        V.content = () => pageHead('Content', 'Everything customers read on the storefront.', `<button class="btn p" data-act="csave">Save changes</button>`) +
+            `<div class="card glass"><div class="row" style="justify-content:space-between"><div><h3>Announcement bar</h3><div class="sub">Scrolls across the top of the store</div></div><span class="sw ${CONT.annOn ? 'on' : ''}" data-act="annon"></span></div><div id="mqp">${mqHTML()}</div><div id="annl" style="display:flex;flex-direction:column;gap:8px;margin-top:12px">${annList()}</div><button class="btn sm" style="margin-top:10px" data-act="annadd">${ic('plus')}Add message</button></div>
+ <div class="grid ge"><div class="card glass"><h3>Homepage sections</h3><div class="sub">Reorder or hide</div><div id="secl">${secList()}</div></div><div class="card glass"><h3>Hero banner</h3><div class="f" style="margin:10px 0"><label>Headline</label><input class="in" data-c="hero.h" value="${esc(CONT.hero.h)}"></div><div class="f" style="margin-bottom:10px"><label>Sub-text</label><input class="in" data-c="hero.s" value="${esc(CONT.hero.s)}"></div><div class="f"><label>Button label</label><input class="in" data-c="hero.cta" value="${esc(CONT.hero.cta)}"></div></div></div>
+ <div class="card glass"><h3>Policy pages</h3><div class="seg" style="margin:10px 0">${Object.keys(CONT.pages).map(k => `<button class="${S.pp === k || (!S.pp && k === 'Shipping') ? 'on' : ''}" data-act="ppage" data-v="${k}">${k}</button>`).join('')}</div><textarea class="ta" style="min-height:120px" data-c="pg">${esc(CONT.pages[S.pp || 'Shipping'])}</textarea></div>`;
+        const annList = () => CONT.ann.map((m, i) => `<div class="row" style="flex-wrap:nowrap"><input class="in" data-c="ann.${i}" value="${esc(m)}"><button class="btn sm d" data-act="anndel" data-i="${i}" aria-label="Remove">${ic('x')}</button></div>`).join('');
+        const secList = () => CONT.secs.map((s, i) => `<div class="li"><div class="g"><b>${s.n}</b></div><button class="btn sm" data-act="secmv" data-i="${i}" data-d="-1" ${i == 0 ? 'disabled' : ''}>↑</button><button class="btn sm" data-act="secmv" data-i="${i}" data-d="1" ${i == CONT.secs.length - 1 ? 'disabled' : ''}>↓</button><span class="sw ${s.on ? 'on' : ''}" data-act="sectog" data-i="${i}"></span></div>`).join('');
+        /* ===== Settings ===== */
+        const sw = (k, l, sub) => `<div class="li"><div class="g"><b>${l}</b>${sub ? `<span>${sub}</span>` : ''}</div><span class="sw ${SET[k] ? 'on' : ''}" data-act="sset" data-k="${k}"></span></div>`;
+        const sf = (k, l, t = 'text', ex = '') => `<div class="f"><label>${l}</label><input class="in" type="${t}" data-set="${k}" value="${esc(SET[k])}" ${ex}></div>`;
+        const SPAN = { general: 'General', delivery: 'Delivery', payments: 'Payments', stock: 'Stock rules', notify: 'Notifications' };
+        V['store-settings'] = () => {
+            const t = S.ps; let b = '';
+            if (t === 'general') b = `<div class="fg">${sf('name', 'Store name')}${sf('email', 'Contact email', 'email')}${sf('phone', 'Phone')}${sf('addr', 'Pickup / return address')}</div>`;
+            if (t === 'delivery') b = `<div class="fg">${sf('inDhaka', 'Delivery inside Dhaka (৳)', 'number')}${sf('outDhaka', 'Delivery outside Dhaka (৳)', 'number')}${sf('free', 'Free delivery above (৳)', 'number')}</div><div class="sub" style="margin-top:12px">Couriers: Pathao · Steadfast · RedX (choose per order)</div>`;
+            if (t === 'payments') b = sw('cod', 'Cash on delivery', 'Customer pays the courier') + sw('bkash', 'bKash', 'Manual send-money, confirm with TrxID') + sw('nagad', 'Nagad', 'Manual send-money') + sw('card', 'Card / online (SSLCommerz)', 'Needs a merchant account') + `<div class="fg" style="margin-top:12px">${sf('bkNo', 'bKash / Nagad merchant number')}</div>`;
+            if (t === 'stock') b = `<div class="fg">${sf('low', 'Low-stock alert at (units)', 'number')}<div class="f"><label>Deduct stock when order is</label>${dd('ded', [['place', 'Placed'], ['confirm', 'Confirmed']], SET.deduct, v => { SET.deduct = v })}</div></div>` + sw('hide', 'Auto-hide sizes that hit 0', 'Shows “Out of stock” on the storefront');
+            if (t === 'notify') b = sw('nOrder', 'New order alert', 'Email + dashboard bell') + sw('nLow', 'Low-stock alert') + sw('nDaily', 'Daily sales summary', 'Sent 9pm every day');
+            return pageHead('Store settings', 'Delivery, payments and store rules.', `<button class="btn p" data-act="setsave">Save settings</button>`) + `<div class="card glass"><div class="seg" style="margin-bottom:16px">${Object.keys(SPAN).map(k => `<button class="${t === k ? 'on' : ''}" data-act="stab" data-v="${k}">${SPAN[k]}</button>`).join('')}</div>${b}</div>`
+        };
+        /* ===== Staff ===== */
+        V.staff = () => {
+            const lg = LOG.filter(l => S.sf === 'all' || l[0] === S.sf); return pageHead('Staff & roles', 'Who can do what in the admin.', `<button class="btn p" data-act="invite">${ic('plus')}Invite staff</button>`) +
+                `<div class="card glass"><div class="tw"><table><tr><th>Member</th><th>Role</th><th>Last active</th><th>Active</th></tr>${STAFF.map((s, i) => `<tr><td><div class="cell"><div class="av" style="background:linear-gradient(145deg,#2b2e34,#101216);color:#fff">${init(s.name)}</div><div><b>${esc(s.name)}</b><span>${esc(s.email)}</span></div></div></td><td>${s.role === 'Owner' ? '<span class="bd b-k">Owner</span>' : dd('sr' + i, [['Manager', 'Manager'], ['Staff', 'Staff']], s.role, v => { STAFF[i].role = v; toast('Role updated') }, 130)}</td><td>${s.last}</td><td>${s.role === 'Owner' ? '—' : `<span class="sw ${s.on ? 'on' : ''}" data-act="stog" data-i="${i}"></span>`}</td></tr>`).join('')}</table></div></div>
+ <div class="grid ge"><div class="card glass"><h3>Role permissions</h3><div class="tw"><table style="min-width:360px"><tr><th>Permission</th><th>Owner</th><th>Manager</th><th>Staff</th></tr>${PERM.map(r => `<tr><td>${r[0]}</td>${[1, 2, 3].map(k => `<td>${r[k] ? '<span style="color:var(--green)">●</span>' : '<span style="color:var(--ink3)">–</span>'}</td>`).join('')}</tr>`).join('')}</table></div></div>
+ <div class="card glass"><div class="row" style="justify-content:space-between"><h3>Activity log</h3>${dd('lf', [['all', 'Everyone'], ['Rakibul', 'Rakibul'], ['Nadia', 'Nadia'], ['Sohan', 'Sohan']], S.sf, v => { S.sf = v; redo() }, 140)}</div><div class="tl" style="margin-top:12px">${lg.map(l => `<div><b style="font-weight:500">${esc(l[0])}</b> · ${esc(l[1])}<small>${l[2]}</small></div>`).join('') || '<span class="empty">No activity.</span>'}</div></div></div>`
+        };
+        /* ===== overlays ===== */
+        function palette() { modal(`<input class="in" id="pal" placeholder="Search orders, products, customers…" autocomplete="off" style="height:46px;font-size:16px"><div id="palr" style="margin-top:10px">${palRes('')}</div>`); setTimeout(() => { const e = $('#pal'); if (e) e.focus() }, 30) }
+        function palRes(q) {
+            q = q.toLowerCase(); let h = ''; const sec = (t, a) => { if (a.length) h += `<div class="sub" style="margin:10px 0 2px">${t}</div>` + a.join('') };
+            const ro = OR.filter(o => !q || o.id.toLowerCase().includes(q) || cust(o.cid).name.toLowerCase().includes(q)).slice(0, 5).map(o => `<button class="btn" style="width:100%;justify-content:space-between;margin:2px 0" data-go="order-${o.id}"><span>${o.id} · ${esc(cust(o.cid).name)}</span>${bdg(o.status)}</button>`);
+            const rp = PR.filter(p => !q || (p.name + p.brand).toLowerCase().includes(q)).slice(0, 5).map(p => `<button class="btn" style="width:100%;justify-content:space-between;margin:2px 0" data-go="product-${p.id}"><span>${esc(p.name)} · ${esc(p.brand)}</span>${stockBd(p)}</button>`);
+            const rc = q ? CU.filter(c => c.name.toLowerCase().includes(q) || c.phone.includes(q)).slice(0, 4).map(c => `<button class="btn" style="width:100%;justify-content:flex-start;margin:2px 0" data-act="cust" data-id="${c.id}">${esc(c.name)} · ${c.phone}</button>`) : [];
+            sec('Orders', ro); sec('Products', rp); sec('Customers', rc); const pg = NAV.filter(n => !q || n[1].toLowerCase().includes(q)).slice(0, 4).map(n => `<button class="btn" style="width:100%;justify-content:flex-start;margin:2px 0" data-go="${n[0]}">${ic(n[2])}${n[1]}</button>`); if (q) sec('Pages', pg); return h || '<div class="empty">No results</div>'
+        }
+        function bell() { const pend = OR.filter(o => o.status === 'pending'), low = lowList(); modal(`<div class="row" style="justify-content:space-between"><h2>Alerts</h2><button class="ib" data-act="ovclose2">${ic('x')}</button></div><div class="sub" style="color:var(--ink3)">${pend.length} orders waiting · ${low.length} stock alerts</div>${pend.slice(0, 5).map(o => `<div class="li" style="cursor:pointer" data-go="order-${o.id}"><span class="dot a"></span><div class="g"><b>${o.id} needs confirming</b><span>${esc(cust(o.cid).name)} · ${T(o.total)} · ${ago(o.t)}</span></div></div>`).join('')}${low.slice(0, 6).map(a => `<div class="li" style="cursor:pointer" data-go="inventory"><span class="dot ${a.q ? 'a' : 'r'}"></span><div class="g"><b>${esc(a.p.name)} ${a.s}</b><span>${a.q ? a.q + ' left' : 'Out of stock'}</span></div></div>`).join('')}`, '', true) }
+        function manualOrder() { S.mo = { name: '', phone: '', district: 'Dhaka', pid: PR[0].id, size: '3ml', qty: 1, pay: 'COD' }; const m = S.mo; modal(`<h2>Manual order</h2><div class="sub" style="color:var(--ink3)">For Facebook / Instagram / phone orders.</div><div class="fg" style="margin-top:12px"><div class="f"><label>Customer name *</label><input class="in" data-mo="name"><span class="em" id="e-mn"></span></div><div class="f"><label>Phone *</label><input class="in" data-mo="phone" placeholder="01XXXXXXXXX"><span class="em" id="e-mp"></span></div><div class="f"><label>District</label>${dd('mdist', ['Dhaka', 'Chattogram', 'Sylhet', 'Rajshahi', 'Khulna', 'Cumilla', 'Gazipur', 'Narayanganj', 'Bogura', 'Rangpur'].map(x => [x, x]), 'Dhaka', v => { m.district = v; moUp() })}</div><div class="f"><label>Payment</label>${dd('mpay', PAY.map(x => [x, x]), 'COD', v => { m.pay = v })}</div><div class="f"><label>Perfume</label>${dd('mpid', PR.map(p => [p.id, p.name + ' · ' + p.brand]), m.pid, v => { m.pid = v; moUp() })}</div><div class="f"><label>Size</label>${dd('msz', SZ.map(x => [x, x]), '3ml', v => { m.size = v; moUp() })}</div><div class="f"><label>Quantity</label><input class="in" type="number" min="1" value="1" data-mo="qty"></div></div><div class="row" style="justify-content:space-between;margin-top:14px"><span style="color:var(--ink2)">Total incl. delivery</span><b style="font-size:20px" id="motot"></b></div><div class="mf"><button class="btn" data-act="ovclose2">Cancel</button><button class="btn p" data-act="savemo">Create order</button></div>`); moUp() }
+        function moUp() { const m = S.mo, p = g(m.pid), e = $('#motot'); if (e) e.textContent = T(price(p, m.size) * (+m.qty || 1) + fee(m.district)) }
+        function invite() { modal(`<h2>Invite staff</h2><div class="f" style="margin-top:12px"><label>Name *</label><input class="in" id="in-n"></div><div class="f" style="margin-top:10px"><label>Email *</label><input class="in" id="in-e" type="email"><span class="em" id="e-in"></span></div><div class="f" style="margin-top:10px"><label>Role</label>${dd('inr', [['Manager', 'Manager'], ['Staff', 'Staff']], 'Staff', v => { S.inr = v }, 160)}</div><div class="mf"><button class="btn" data-act="ovclose2">Cancel</button><button class="btn p" data-act="sendinv">Send invite</button></div>`); S.inr = 'Staff' }
+        /* ===== login ===== */
+        const DEMO = { email: 'admin@tadic.club', pw: 'tadic123', otp: '123456' };
+        let AUTHED = false; const LS = { step: 1, fails: 0, until: 0, msg: '', email: '', pwv: false };
+        const hasSess = () => { try { return sessionStorage.getItem('tda') === '1' } catch (x) { return false } };
+        const setSess = v => { try { v ? sessionStorage.setItem('tda', '1') : sessionStorage.removeItem('tda') } catch (x) { } };
+        function boot() { if (hasSess()) enter(); else showLogin() }
+        function enter() { AUTHED = true; $('#login').hidden = true; $('#app').hidden = false; renderShell(); route() }
+        function showLogin() { AUTHED = false; closeM(); LS.step = 1; LS.msg = ''; $('#app').hidden = true; $('#login').hidden = false; drawLogin() }
+        function drawLogin() {
+            const lk = LS.until > Date.now(), L = $('#login'); let b = '';
+            if (LS.step === 1) b = `<h2>Welcome back</h2><div class="sb">Sign in to manage your store</div>${LS.msg ? `<div class="err" role="alert">${LS.msg}</div>` : ''}<form id="lf" class="view" style="gap:12px" autocomplete="on"><div class="f"><label for="le">Email</label><input class="in" id="le" type="email" autocomplete="username" placeholder="you@tadic.club" value="${esc(LS.email)}" ${lk ? 'disabled' : ''}></div><div class="f"><label for="lp">Password</label><div class="pwb"><input class="in" id="lp" type="${LS.pwv ? 'text' : 'password'}" autocomplete="current-password" placeholder="••••••••" ${lk ? 'disabled' : ''}><button type="button" data-act="showpw" aria-label="Show password">${ic('eye')}</button></div></div><div class="row" style="justify-content:space-between"><label class="row" style="gap:8px;cursor:pointer"><span class="cb on" id="rm" data-act="rmtog"></span>Keep me signed in</label><button type="button" class="lk" data-act="forgot">Forgot password?</button></div><button class="btn p" type="submit" ${lk ? 'disabled' : ''}>${lk ? 'Locked — wait ' + Math.ceil((LS.until - Date.now()) / 1000) + 's' : 'Sign in'}</button></form><div class="demo"><b style="font-weight:500">Demo login</b><br>Email: ${DEMO.email}<br>Password: ${DEMO.pw}</div>`;
+            if (LS.step === 2) b = `<h2>Verify it’s you</h2><div class="sb">Enter the 6-digit code sent to ${esc(LS.email)}</div>${LS.msg ? `<div class="err" role="alert">${LS.msg}</div>` : ''}<form id="of" class="view" style="gap:12px"><input class="in otp" id="lo" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="••••••"><button class="btn p" type="submit">Verify & continue</button><button type="button" class="lk" data-act="lgback" style="align-self:center">Back to sign in</button></form><div class="demo">Demo code: ${DEMO.otp}</div>`;
+            if (LS.step === 3) b = `<h2>Reset password</h2><div class="sb">We’ll email you a reset link</div><form id="ff" class="view" style="gap:12px"><div class="f"><label>Email</label><input class="in" id="fe" type="email" placeholder="you@tadic.club" value="${esc(LS.email)}"><span class="em" id="e-fe"></span></div><button class="btn p" type="submit">Send reset link</button><button type="button" class="lk" data-act="lgback" style="align-self:center">Back to sign in</button></form>`;
+            L.innerHTML = `<div class="glass lgc"><div class="lo">TADIĆ<small>ADMIN PANEL</small></div>${b}<div class="sec">${ic('staff')} Authorized staff only · activity is logged</div></div>`;
+            const f = L.querySelector('input:not([disabled])'); if (f && LS.step !== 1) f.focus()
+        }
+        function bad(m) { LS.msg = m; drawLogin(); const c = $('.lgc'); c.classList.remove('shake'); void c.offsetWidth; c.classList.add('shake') }
+        document.addEventListener('submit', e => {
+            e.preventDefault(); const id = e.target.id;
+            if (id === 'lf') {
+                if (LS.until > Date.now()) return; const em = $('#le').value.trim().toLowerCase(), pw = $('#lp').value; LS.email = em; if (!em || !pw) { bad('Enter your email and password.'); return }
+                const btn = e.target.querySelector('.btn.p'); btn.textContent = 'Signing in…'; btn.disabled = true;
+                setTimeout(() => { if (em === DEMO.email && pw === DEMO.pw) { LS.fails = 0; LS.step = 2; LS.msg = ''; drawLogin() } else { LS.fails++; if (LS.fails >= 5) { LS.until = Date.now() + 30000; LS.fails = 0; bad('Too many attempts. Try again in 30 seconds.'); tick() } else bad(`Incorrect email or password. ${5 - LS.fails} attempt${5 - LS.fails > 1 ? 's' : ''} left.`) } }, 500)
+            }
+            if (id === 'of') { const v = $('#lo').value.trim(); if (v === DEMO.otp) { setSess(true); LS.msg = ''; toast('Signed in'); enter() } else bad('That code is wrong. Try again.') }
+            if (id === 'ff') { const v = $('#fe').value.trim(); if (!/^\S+@\S+\.\S+$/.test(v)) { $('#e-fe').textContent = 'Enter a valid email'; return } LS.step = 1; LS.msg = ''; LS.email = v; drawLogin(); toast('If this email has an account, a reset link is on its way') }
+        });
+        function tick() { const t = setInterval(() => { if (LS.until <= Date.now() || AUTHED) { clearInterval(t); LS.msg = ''; if (!AUTHED && LS.step === 1) drawLogin(); return } if (LS.step === 1) { const b = document.querySelector('#lf .btn.p'); if (b) b.textContent = 'Locked — wait ' + Math.ceil((LS.until - Date.now()) / 1000) + 's' } }, 500) }
+        document.addEventListener('click', e => {
+            const a = e.target.closest('[data-act]'); if (!a) return; const k = a.dataset.act;
+            if (k === 'showpw') { const i = $('#lp'); LS.pwv = i.type === 'password'; i.type = LS.pwv ? 'text' : 'password' }
+            if (k === 'rmtog') a.classList.toggle('on');
+            if (k === 'forgot') { LS.email = $('#le').value; LS.step = 3; drawLogin() }
+            if (k === 'lgback') { LS.step = 1; LS.msg = ''; drawLogin() }
+            if (k === 'logout') { confirmM('Log out?', 'You’ll need to sign in again to open the admin.', 'Log out', () => { setSess(false); location.hash = ''; showLogin(); toast('Logged out') }) }
+        });
+        /* ===== events ===== */
+        const goto = h => { closeM(); if (location.hash === '#' + h) route(); else location.hash = h };
+        document.addEventListener('click', e => {
+            const t = e.target; if (!t.closest('.pop') && !t.closest('[data-act=dd]')) closePop();
+            const go = t.closest('[data-go]'); if (go) { goto(go.dataset.go); return }
+            const a = t.closest('[data-act]'); if (!a) return; const k = a.dataset.act, D = a.dataset;
+            if (k === 'ovclose') { if (t === a) closeM(); return }
+            const o = D.id && OR.find(x => x.id === D.id);
+            switch (k) {
+                case 'ovclose2': closeM(); break;
+                case 'cfok': { const f = CF; CF = null; closeM(); f && f() } break;
+                case 'menu': $('#side').classList.toggle('open'); $('#scrim').classList.toggle('show'); break;
+                case 'palette': palette(); break; case 'bell': bell(); break;
+                case 'dd': openDD(a); break;
+                case 'pick': { const b = document.querySelector(`[data-act=dd][data-k="${D.k}"] span`); if (b) b.textContent = a.textContent; closePop(); DDH[D.k] && DDH[D.k](D.v) } break;
+                case 'rng': S.rng = +D.v; redo(); break;
+                case 'otab': S.of.tab = D.v; S.of.page = 1; redo(); break;
+                case 'opg': S.of.page += +D.v; $('#ol').innerHTML = ordList(); break;
+                case 'neworder': manualOrder(); break;
+                case 'savemo': {
+                    const m = S.mo; let ok = true; $('#e-mn').textContent = m.name.trim() ? '' : (ok = false, 'Required'); $('#e-mp').textContent = /^01\d{9}$/.test(m.phone.trim()) ? '' : (ok = false, 'Enter a valid 11-digit number'); if (!ok) break;
+                    let c = CU.find(x => x.phone === m.phone.trim()); if (!c) { c = { id: 'C' + (100 + CU.length), name: m.name.trim(), phone: m.phone.trim(), district: m.district, notes: '' }; CU.push(c) }
+                    const p = g(m.pid), q = Math.max(1, +m.qty || 1), sub = price(p, m.size) * q, f = fee(m.district); const n = { id: 'TD-' + (++OID), t: NOW, cid: c.id, items: [{ pid: m.pid, size: m.size, qty: q }], status: 'pending', pay: m.pay, paid: m.pay !== 'COD' && false, sub, disc: 0, code: '', fee: f, total: sub + f, district: m.district, addr: m.district, courier: '', track: '', note: '', tl: [[NOW, 'Manual order created']], src: 'Manual' }; OR.unshift(n); LOGADD('Created manual order ' + n.id); closeM(); toast('Order ' + n.id + ' created'); renderShell(); location.hash = 'order-' + n.id
+                } break;
+                case 'adv': { const nx = ST[ST.indexOf(o.status) + 1]; setStatus(o, nx); toast(o.id + ' → ' + nx); renderShell(); redo() } break;
+                case 'paid': o.paid = true; o.tl.push([NOW, 'Payment received']); toast('Marked as paid'); redo(); break;
+                case 'cancelo': confirmM('Cancel ' + o.id + '?', 'Stock will be returned to inventory.', 'Cancel order', () => { setStatus(o, 'cancelled'); toast(o.id + ' cancelled'); renderShell(); redo() }); break;
+                case 'inv': { const c = cust(o.cid); const tx = `${o.id}\n${c.name} · ${c.phone}\n${o.addr}\n${itemsTxt(o)}\nTotal: ${T(o.total)} (${o.pay})`; try { navigator.clipboard.writeText(tx).then(() => toast('Summary copied'), () => toast('Copy blocked — select manually', 1)) } catch (x) { toast('Copy blocked', 1) } } break;
+                case 'cust': closeM(); custDrawer(D.id); break;
+                case 'sel': S.pf.sel.has(D.id) ? S.pf.sel.delete(D.id) : S.pf.sel.add(D.id); redoList(); break;
+                case 'selall': { const a = prodFiltered(); const all = a.every(p => S.pf.sel.has(p.id)); a.forEach(p => all ? S.pf.sel.delete(p.id) : S.pf.sel.add(p.id)); redoList() } break;
+                case 'bulk': { const ids = [...S.pf.sel]; if (D.v === 'del') delProducts(ids); else { ids.forEach(i => g(i).status = D.v); S.pf.sel.clear(); LOGADD(`Set ${ids.length} products ${D.v}`); toast(ids.length + ' products updated'); redoList() } } break;
+                case 'delp': delProducts([D.id]); break;
+                case 'savep': saveProduct(); break;
+                case 'szon': S.draft.on[D.s] = !S.draft.on[D.s]; $('#view').innerHTML = prodForm(); break;
+                case 'fst': S.draft.stock[D.s] = Math.max(0, S.draft.stock[D.s] + +D.d); $('#view').innerHTML = prodForm(); break;
+                case 'ftag': { const d = S.draft, i = d.tags.indexOf(D.t); i > -1 ? d.tags.splice(i, 1) : d.tags.push(D.t); $('#view').innerHTML = prodForm() } break;
+                case 'rmimg': S.draft.img = ''; $('#view').innerHTML = prodForm(); break;
+                case 'itab': S.inv.tab = D.v; redo(); break;
+                case 'istp': setInv(D.k, Math.max(0, cvk(D.k) + +D.d)); break;
+                case 'isave': { Object.entries(S.inv.d).forEach(([k, v]) => { const [i, s] = k.split('|'); g(i).stock[s] = v }); LOGADD(`Updated stock on ${Object.keys(S.inv.d).length} sizes`); S.inv.d = {}; toast('Stock saved'); renderShell(); invUp() } break;
+                case 'idisc': S.inv.d = {}; invUp(); break;
+                case 'ctab': S.cf.tab = D.v; redo(); break;
+                case 'ptog': { const p = PROMO[D.i]; if (pexp(p)) { toast('This code has ended — edit its expiry or limit', 1); break } p.on = !p.on; redo() } break;
+                case 'newpromo': promoModal(-1); break; case 'editpromo': promoModal(+D.i); break;
+                case 'delpromo': confirmM('Delete ' + PROMO[D.i].code + '?', 'Customers will no longer be able to use this code.', 'Delete', () => { PROMO.splice(D.i, 1); toast('Code deleted'); redo() }); break;
+                case 'savepromo': {
+                    const m = S.pm, c = (m.code || '').trim().toUpperCase(); if (!/^[A-Z0-9]{3,16}$/.test(c)) { $('#e-pc').textContent = '3–16 letters or numbers'; break } if (PROMO.some((x, i) => x.code === c && i !== m.i)) { $('#e-pc').textContent = 'Code already exists'; break }
+                    const n = { code: c, type: m.type, val: +m.val || 0, min: +m.min || 0, limit: +m.limit || 1, used: m.used, exp: m.exp, on: m.on, note: m.note }; m.i >= 0 ? PROMO[m.i] = n : PROMO.unshift(n); LOGADD('Saved promo ' + c); closeM(); toast('Promo saved'); redo()
+                } break;
+                case 'arng': S.af = +D.v; redo(); break;
+                case 'annon': CONT.annOn = !CONT.annOn; a.classList.toggle('on'); break;
+                case 'annadd': CONT.ann.push(''); $('#annl').innerHTML = annList(); break;
+                case 'anndel': CONT.ann.splice(D.i, 1); $('#annl').innerHTML = annList(); $('#mqp').innerHTML = mqHTML(); break;
+                case 'secmv': { const i = +D.i, j = i + +D.d, s = CONT.secs;[s[i], s[j]] = [s[j], s[i]]; $('#secl').innerHTML = secList() } break;
+                case 'sectog': CONT.secs[D.i].on = !CONT.secs[D.i].on; $('#secl').innerHTML = secList(); break;
+                case 'ppage': S.pp = D.v; redo(); break;
+                case 'csave': LOGADD('Updated store content'); toast('Content published to storefront'); break;
+                case 'stab': S.ps = D.v; redo(); break;
+                case 'sset': SET[D.k] = !SET[D.k]; redo(); break;
+                case 'setsave': LOGADD('Updated store settings'); toast('Settings saved'); renderShell(); break;
+                case 'invite': invite(); break;
+                case 'sendinv': { const n = $('#in-n').value.trim(), m = $('#in-e').value.trim(); if (!n || !/^\S+@\S+\.\S+$/.test(m)) { $('#e-in').textContent = 'Enter a name and a valid email'; break } STAFF.push({ id: Date.now(), name: n, email: m, role: S.inr, on: true, last: 'Invited' }); LOGADD('Invited ' + n); closeM(); toast('Invite sent to ' + m); redo() } break;
+                case 'stog': STAFF[D.i].on = !STAFF[D.i].on; redo(); break;
+            }
+        });
+        const cvk = k => { const [i, s] = k.split('|'); return cv(g(i), s) };
+        function setInv(k, v) { const [i, s] = k.split('|'); if (v === g(i).stock[s]) delete S.inv.d[k]; else S.inv.d[k] = v; invUp() }
+        document.addEventListener('input', e => {
+            const t = e.target, D = t.dataset;
+            if (t.id === 'pal') { $('#palr').innerHTML = palRes(t.value); return }
+            if (D.act === 'osearch') { S.of.q = t.value; S.of.page = 1; $('#ol').innerHTML = ordList() }
+            if (D.act === 'psearch') { S.pf.q = t.value; redoList() }
+            if (D.act === 'isearch') { S.inv.q = t.value; $('#il').innerHTML = invList() }
+            if (D.act === 'csearch') { S.cf.q = t.value; $('#cl').innerHTML = custList() }
+            if (D.f) { const d = S.draft; d[D.f] = ['p3', 'full', 'off'].includes(D.f) ? (+t.value || 0) : t.value; pvUp() }
+            if (D.ov) { S.draft.ov[D.ov] = +t.value || 0; pvUp() }
+            if (D.sq) S.draft.stock[D.sq] = Math.max(0, +t.value || 0);
+            if (D.pm) S.pm[D.pm] = t.value;
+            if (D.mo) { S.mo[D.mo] = t.value; moUp() }
+            if (D.set) { SET[D.set] = t.type === 'number' ? +t.value || 0 : t.value }
+            if (D.c) { const [p, x] = D.c.split('.'); if (p === 'ann') { CONT.ann[+x] = t.value; $('#mqp').innerHTML = mqHTML() } else if (p === 'hero') CONT.hero[x] = t.value; else if (p === 'pg') CONT.pages[S.pp || 'Shipping'] = t.value }
+            if (D.act === 'onote') { OR.find(x => x.id === D.id).note = t.value }
+            if (D.act === 'cnote') { cust(D.id).notes = t.value }
+            if (D.act === 'track') { OR.find(x => x.id === D.id).track = t.value }
+        });
+        document.addEventListener('change', e => {
+            const t = e.target, D = t.dataset;
+            if (D.act === 'iin') setInv(D.k, Math.max(0, Math.floor(+t.value || 0)));
+            if (t.id === 'pfile' && t.files[0]) { const r = new FileReader(); r.onload = () => { S.draft.img = r.result; $('#view').innerHTML = prodForm() }; r.readAsDataURL(t.files[0]) }
+        });
+        document.addEventListener('keydown', e => { if (AUTHED && (e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); palette() } if (e.key === 'Escape') { closeM(); closePop() } });
+        document.addEventListener('mouseover', e => { const t = e.target.closest && e.target.closest('[data-t]'); const old = document.querySelector('.tip'); if (old) old.remove(); if (!t) return; const c = t.closest('.chart'), cr = c.getBoundingClientRect(), r = t.getBoundingClientRect(); const d = document.createElement('div'); d.className = 'tip'; d.textContent = t.dataset.t; d.style.left = (r.left + r.width / 2 - cr.left) + 'px'; d.style.top = (r.top + r.height / 2 - cr.top) + 'px'; c.append(d) });
+        addEventListener('hashchange', () => { if (AUTHED) route() });
+        boot();
+    </script>
+
+</body>
+
+</html>
